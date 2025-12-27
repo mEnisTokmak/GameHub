@@ -1,0 +1,73 @@
+/* Steam Dark Theme */
+:root {
+  --steam-dark: #171a21;
+  --steam-light-dark: #1b2838;
+  --steam-blue: #66c0f4;
+  --steam-green: #a4d007;
+  --steam-text: #c6d4df;
+  --steam-hover: #2a475e;
+}
+
+body {
+  margin: 0;
+  background-color: var(--steam-dark);
+  color: var(--steam-text);
+  font-family: "Motiva Sans", Sans-serif, Arial; /* Steam fontu */
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* Navbar Stili */
+nav {
+  background-color: var(--steam-dark);
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.logo { font-size: 24px; font-weight: bold; color: white; letter-spacing: 2px; }
+
+.nav-links a {
+  margin-left: 20px;
+  color: #b8b6b4;
+  font-size: 14px;
+}
+.nav-links a:hover { color: var(--steam-blue); }
+
+/* Form Stilleri (Login için) */
+.login-box {
+  background: var(--steam-light-dark);
+  padding: 40px;
+  border-radius: 4px;
+  width: 400px;
+  margin: 100px auto;
+  text-align: center;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  background: #32353c;
+  border: 1px solid #000;
+  color: white;
+  border-radius: 2px;
+}
+
+button.steam-btn {
+  background: linear-gradient(to right, #47bfff 0%, #1a44c2 100%);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+button.steam-btn:hover {
+  background: linear-gradient(to right, #66c0f4 0%, #1a44c2 100%);
+}
