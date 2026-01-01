@@ -31,6 +31,8 @@ CREATE TABLE Users (
     Password VARCHAR(255) NOT NULL,
     Balance DECIMAL(10, 2) DEFAULT 0.00,
     RegistrationDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    Avatar VARCHAR(255) DEFAULT 'https://avatars.akamai.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg', -- YENİ EKLENDİ
+    About TEXT, -- YENİ EKLENDİ
     FOREIGN KEY (RoleID) REFERENCES Roles(RoleID)
 );
 
@@ -58,6 +60,7 @@ CREATE TABLE Games (
     Price DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
     ReleaseDate DATE,
     SizeGB DECIMAL(5, 2),
+    IsApproved TINYINT DEFAULT 1, -- YENİ EKLENDİ
     FOREIGN KEY (DeveloperID) REFERENCES Developers(DeveloperID) ON DELETE CASCADE
 );
 
