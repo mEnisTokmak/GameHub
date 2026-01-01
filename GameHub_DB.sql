@@ -239,50 +239,45 @@ INSERT INTO Categories (CategoryName) VALUES ('Action'), ('RPG'), ('Strategy'), 
 
 -- 5. Games
 INSERT INTO Games (DeveloperID, Title, Description, Price, ReleaseDate, SizeGB, IsApproved, ImageUrl, HeaderUrl) VALUES
--- AKSİYON & MACERA
 (3, 'GTA V', 'Devasa açık dünya suç simülasyonu.', 900.00, '2013-09-17', 110.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/271590/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/271590/library_hero.jpg'),
 (3, 'Red Dead Redemption 2', 'Vahşi batıda geçen epik bir hikaye.', 1150.00, '2019-12-05', 120.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1174180/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1174180/library_hero.jpg'),
 (9, 'God of War', 'Kratosun İskandinav mitolojisindeki yolculuğu.', 899.00, '2022-01-14', 70.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1593500/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1593500/library_hero.jpg'),
 (7, 'Resident Evil 4 Remake', 'Hayatta kalma korku klasiğinin dönüşü.', 1200.00, '2023-03-24', 65.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2050650/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2050650/library_hero.jpg'),
 
--- RPG (ROL YAPMA)
 (4, 'The Witcher 3: Wild Hunt', 'Canavar avcısı Geraltın hikayesi.', 400.00, '2015-05-19', 50.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/292030/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/292030/library_hero.jpg'),
 (8, 'Elden Ring', 'Acımasız ve büyüleyici bir açık dünya.', 1400.00, '2022-02-25', 60.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/library_hero.jpg'),
 (4, 'Cyberpunk 2077', 'Geleceğin karanlık şehri Night City.', 1250.00, '2020-12-10', 70.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1091500/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1091500/library_hero.jpg'),
 (6, 'Baldurs Gate 3', 'Dungeons & Dragons evreninde geçen efsanevi RPG.', 1500.00, '2023-08-03', 150.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1086940/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1086940/library_hero.jpg'),
 
--- STRATEJİ
 (1, 'Civilization VI', 'Medeniyetini kur ve yönet.', 350.00, '2016-10-21', 12.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/289070/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/289070/library_hero.jpg'),
 (1, 'Age of Empires IV', 'Tarihi savaş stratejisi.', 800.00, '2021-10-28', 50.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1466860/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1466860/library_hero.jpg'),
 (10, 'Cities: Skylines II', 'Şehir kurma ve yönetme simülasyonu.', 950.00, '2023-10-24', 60.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/949230/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/949230/library_hero.jpg'),
 
--- FPS & ONLINE
 (1, 'Counter-Strike 2', 'Taktiksel nişancı oyunu.', 0.00, '2023-09-27', 30.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/library_hero.jpg'),
 (1, 'Left 4 Dead 2', 'Zombi kıyametinde hayatta kal.', 105.00, '2009-11-17', 15.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/550/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/550/library_hero.jpg'),
 (2, 'Tom Clancys Rainbow Six Siege', 'Yıkılabilir çevreye sahip taktiksel FPS.', 300.00, '2015-12-01', 60.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/359550/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/359550/library_hero.jpg'),
 
--- SPOR & YARIŞ
 (5, 'EA SPORTS FC 24', 'Dünyanın oyunu, futbol simülasyonu.', 1800.00, '2023-09-29', 100.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2195250/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2195250/library_hero.jpg'),
 (5, 'F1 23', 'Formula 1 resmi oyunu.', 1400.00, '2023-06-16', 80.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2108880/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2108880/library_hero.jpg'),
 (10, 'Forza Horizon 5', 'Meksikada açık dünya yarış festivali.', 1200.00, '2021-11-09', 130.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1551360/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1551360/library_hero.jpg'),
 
--- SİMÜLASYON & BULMACA
 (10, 'Stardew Valley', 'Çiftlik hayatı ve RPG öğeleri.', 150.00, '2016-02-26', 1.5, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/413150/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/413150/library_hero.jpg'),
 (10, 'Euro Truck Simulator 2', 'Avrupa yollarında tır sürme deneyimi.', 200.00, '2012-10-19', 12.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/227300/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/227300/library_hero.jpg'),
 (1, 'Portal 2', 'Fizik tabanlı efsanevi bulmaca oyunu.', 105.00, '2011-04-19', 8.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/620/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/620/library_hero.jpg');
 
 -- 6. System Requirements
+-- Kalan 10 oyun için eklemeler:
 INSERT INTO SystemRequirements (GameID, OS, Processor, MemoryGB, GraphicsCard, StorageGB) VALUES
-(1, 'Windows 11', 'Intel i9', 32, 'RTX 4090', 100),
-(2, 'Windows 10', 'Intel i5', 8, 'GTX 1060', 50),
-(3, 'Windows 11', 'Intel i7', 16, 'RTX 3080', 200),
-(4, 'Windows 10', 'AMD Ryzen 7', 16, 'RX 6800', 100),
-(5, 'Windows 10', 'Intel i5', 12, 'GTX 1060', 60),
-(6, 'Windows 10', 'Intel i7', 16, 'RTX 2060', 50),
-(7, 'Windows 11', 'Intel i5', 8, 'GTX 1660', 60),
-(8, 'Windows 10', 'AMD Ryzen 5', 16, 'RTX 2080', 130),
-(9, 'Windows 10', 'Intel i5', 8, 'GTX 1050', 70),
-(10, 'Windows 7', 'Intel Core 2 Duo', 4, 'Integrated', 10);
+(11, 'Windows 10', 'Intel i7 9700K', 16, 'RTX 3080', 60), -- Cities Skylines 2
+(12, 'Windows 10', 'Intel i5 7500', 8, 'GTX 1060', 85),  -- CS2
+(13, 'Windows 7', 'Intel Core 2 Duo', 4, 'GeForce 6600', 15), -- L4D2
+(14, 'Windows 10', 'Intel i5 4590', 8, 'GTX 960', 60), -- R6 Siege
+(15, 'Windows 10', 'Intel i7 6700', 12, 'GTX 1660', 100), -- FC 24
+(16, 'Windows 10', 'Intel i5 9600K', 16, 'RTX 2060', 80), -- F1 23
+(17, 'Windows 10', 'Ryzen 5 1500X', 16, 'GTX 1070', 110), -- Forza 5
+(18, 'Windows 10', 'Intel Core 2 Duo', 4, 'Integrated', 2), -- Stardew Valley
+(19, 'Windows 7', 'Intel Core i5', 8, 'GTX 760', 12), -- ETS 2
+(20, 'Windows 8', 'Intel Core 2 Duo', 4, 'Integrated', 8); -- Portal 2
 
 -- 7. Tags
 INSERT INTO Tags (TagName) VALUES ('Multiplayer'), ('Singleplayer'), ('Co-op'), ('Open World'), ('Story Rich'), ('Difficult'), ('Sci-Fi'), ('Fantasy'), ('FPS'), ('Indie');
@@ -344,12 +339,25 @@ INSERT INTO Reviews (UserID, GameID, Rating, Comment) VALUES
 (6, 20, 10, 'Best puzzle game ever. The dialogue is hilarious.');
 
 -- 16. Achievements
-INSERT INTO Achievements (GameID, Title, Description) VALUES
-(2, 'First Blood', 'First kill.'), (2, 'Sharpshooter', '100 kills with AWP.'), (5, 'Welcome', 'First boss.'), (5, 'Elden Lord', 'Finish the game.'), (10, 'Dream', 'Open the map.'), (3, 'Rich', 'Earn 1 Million.'), (4, 'Monster Hunter', 'Complete contract.'), (7, 'Champion', 'League champion.'), (9, 'Savior', 'Save Ashley.'), (8, 'Explorer', 'Discover planets.');
+INSERT INTO Achievements (GameID, Title, Description, PointValue) VALUES
+(1, 'Welcome to Los Santos', 'GTA V giriş görevini tamamla.', 10),
+(2, 'Legend of the West', 'RDR2 hikayesini %100 bitir.', 50),
+(3, 'God of War', 'Tüm valkürleri yen.', 50),
+(4, 'Survivor', 'Köyden sağ çık.', 20),
+(5, 'Child of Prophecy', 'Oyunu herhangi bir zorlukta bitir.', 30),
+(6, 'Elden Lord', 'Elden Ring tahtına otur.', 100), -- Artık Doğru Yerde (GameID 6)
+(7, 'Breathtaking', 'Tüm siberkasapları yen.', 30),
+(8, 'Critical Hit', 'Zarda 20 at.', 10),
+(12, 'Global Elite', 'Rekabetçi modda rütbe atla.', 25),
+(15, 'Top Scorer', 'Bir maçta 5 gol at.', 15),
+(18, 'Millionaire', '1.000.000 altın kazan.', 40),
+(19, 'Long Haul', '10.000 km yol yap.', 20);
 
 -- 17. User Achievements
+-- 17. USER ACHIEVEMENTS (Düzeltilmiş ID'ler)
+-- Not: Başarım ID'leri 1'den 12'ye kadar olduğu için 15 ve 18 hatalıydı. Düzeltildi.
 INSERT INTO UserAchievements (UserID, AchievementID) VALUES
-(5, 1), (5, 2), (6, 3), (3, 6), (2, 5), (4, 8), (6, 4), (5, 9), (3, 7), (9, 5);
+(2, 1), (4, 2), (5, 6), (3, 9), (6, 11), (2, 3), (4, 10);
 
 -- 18. Friends
 INSERT INTO Friends (User1_ID, User2_ID, Status) VALUES
