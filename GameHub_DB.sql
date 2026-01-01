@@ -235,20 +235,41 @@ INSERT INTO Developers (CompanyName, Website, FoundationYear) VALUES
 ('Indie Studio', 'indiestudio.io', 2023);
 
 -- 4. Categories
-INSERT INTO Categories (CategoryName) VALUES ('Action'), ('RPG'), ('Strategy'), ('Simulation'), ('Sports'), ('Racing'), ('Adventure'), ('Horror'), ('Puzzle'), ('MMORPG');
+INSERT INTO Categories (CategoryName) VALUES ('Action'), ('RPG'), ('Strategy'), ('Simulation'), ('Sports&Racing'), ('Horror'), ('Adventure'), ('Puzzle');
 
 -- 5. Games
 INSERT INTO Games (DeveloperID, Title, Description, Price, ReleaseDate, SizeGB, IsApproved, ImageUrl, HeaderUrl) VALUES
-(1, 'Half-Life 3', 'The legend returns.', 999.99, '2025-12-31', 60.5, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/546560/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/546560/library_hero.jpg'),
-(1, 'Counter-Strike 2', 'Tactical FPS.', 0.00, '2023-09-27', 30.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/library_hero.jpg'),
-(3, 'GTA VI', 'Expected open world game.', 1500.00, '2025-05-15', 150.0, 1, 'https://media-rockstargames-com.akamaized.net/tina-uploads/posts/7k7k5a4523314k/8563725f778d06746869400263f357675121287c.jpg', 'https://media-rockstargames-com.akamaized.net/tina-uploads/posts/7k7k5a4523314k/348d61749c25605d3b37535178602c3855a8264e.jpg'),
-(4, 'The Witcher 4', 'A new saga begins.', 1200.00, '2026-01-01', 85.0, 1, 'https://image.api.playstation.com/vulcan/ap/rnd/202211/0714/19d5c889f0744e7c27181f0868725612c62391b1580b067d.png', 'https://cdn-l-cyberpunk.cdprojektred.com/pl/witcher4-teaser-1920x1080-en.jpg'),
-(8, 'Elden Ring', 'Challenging RPG experience.', 899.00, '2022-02-25', 50.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/library_hero.jpg'),
-(2, 'Assassins Creed Mirage', 'Return to roots.', 900.00, '2023-10-05', 40.0, 1, 'https://image.api.playstation.com/vulcan/ap/rnd/202305/2419/5e6383c271018512128527780005527a6962458428257088.png', 'https://gmedia.playstation.com/is/image/SIEPDC/assassins-creed-mirage-hero-banner-desktop-01-en-18may23'),
-(5, 'FIFA 25', 'Football simulation.', 1100.00, '2024-09-28', 55.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2669320/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2669320/library_hero.jpg'),
-(6, 'Starfield', 'RPG set in space.', 1000.00, '2023-09-06', 125.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1716740/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1716740/library_hero.jpg'),
-(7, 'Resident Evil 4', 'Horror classic.', 850.00, '2023-03-24', 60.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2050650/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2050650/library_hero.jpg'),
-(10, 'Hollow Knight', 'Metroidvania style indie.', 150.00, '2017-02-24', 9.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/367520/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/367520/library_hero.jpg');
+-- AKSİYON & MACERA
+(3, 'GTA V', 'Devasa açık dünya suç simülasyonu.', 900.00, '2013-09-17', 110.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/271590/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/271590/library_hero.jpg'),
+(3, 'Red Dead Redemption 2', 'Vahşi batıda geçen epik bir hikaye.', 1150.00, '2019-12-05', 120.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1174180/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1174180/library_hero.jpg'),
+(9, 'God of War', 'Kratosun İskandinav mitolojisindeki yolculuğu.', 899.00, '2022-01-14', 70.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1593500/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1593500/library_hero.jpg'),
+(7, 'Resident Evil 4 Remake', 'Hayatta kalma korku klasiğinin dönüşü.', 1200.00, '2023-03-24', 65.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2050650/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2050650/library_hero.jpg'),
+
+-- RPG (ROL YAPMA)
+(4, 'The Witcher 3: Wild Hunt', 'Canavar avcısı Geraltın hikayesi.', 400.00, '2015-05-19', 50.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/292030/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/292030/library_hero.jpg'),
+(8, 'Elden Ring', 'Acımasız ve büyüleyici bir açık dünya.', 1400.00, '2022-02-25', 60.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/library_hero.jpg'),
+(4, 'Cyberpunk 2077', 'Geleceğin karanlık şehri Night City.', 1250.00, '2020-12-10', 70.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1091500/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1091500/library_hero.jpg'),
+(6, 'Baldurs Gate 3', 'Dungeons & Dragons evreninde geçen efsanevi RPG.', 1500.00, '2023-08-03', 150.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1086940/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1086940/library_hero.jpg'),
+
+-- STRATEJİ
+(1, 'Civilization VI', 'Medeniyetini kur ve yönet.', 350.00, '2016-10-21', 12.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/289070/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/289070/library_hero.jpg'),
+(1, 'Age of Empires IV', 'Tarihi savaş stratejisi.', 800.00, '2021-10-28', 50.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1466860/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1466860/library_hero.jpg'),
+(10, 'Cities: Skylines II', 'Şehir kurma ve yönetme simülasyonu.', 950.00, '2023-10-24', 60.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/949230/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/949230/library_hero.jpg'),
+
+-- FPS & ONLINE
+(1, 'Counter-Strike 2', 'Taktiksel nişancı oyunu.', 0.00, '2023-09-27', 30.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/library_hero.jpg'),
+(1, 'Left 4 Dead 2', 'Zombi kıyametinde hayatta kal.', 105.00, '2009-11-17', 15.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/550/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/550/library_hero.jpg'),
+(2, 'Tom Clancys Rainbow Six Siege', 'Yıkılabilir çevreye sahip taktiksel FPS.', 300.00, '2015-12-01', 60.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/359550/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/359550/library_hero.jpg'),
+
+-- SPOR & YARIŞ
+(5, 'EA SPORTS FC 24', 'Dünyanın oyunu, futbol simülasyonu.', 1800.00, '2023-09-29', 100.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2195250/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2195250/library_hero.jpg'),
+(5, 'F1 23', 'Formula 1 resmi oyunu.', 1400.00, '2023-06-16', 80.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2108880/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2108880/library_hero.jpg'),
+(10, 'Forza Horizon 5', 'Meksikada açık dünya yarış festivali.', 1200.00, '2021-11-09', 130.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1551360/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1551360/library_hero.jpg'),
+
+-- SİMÜLASYON & BULMACA
+(10, 'Stardew Valley', 'Çiftlik hayatı ve RPG öğeleri.', 150.00, '2016-02-26', 1.5, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/413150/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/413150/library_hero.jpg'),
+(10, 'Euro Truck Simulator 2', 'Avrupa yollarında tır sürme deneyimi.', 200.00, '2012-10-19', 12.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/227300/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/227300/library_hero.jpg'),
+(1, 'Portal 2', 'Fizik tabanlı efsanevi bulmaca oyunu.', 105.00, '2011-04-19', 8.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/620/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/620/library_hero.jpg');
 
 -- 6. System Requirements
 INSERT INTO SystemRequirements (GameID, OS, Processor, MemoryGB, GraphicsCard, StorageGB) VALUES
@@ -267,8 +288,8 @@ INSERT INTO SystemRequirements (GameID, OS, Processor, MemoryGB, GraphicsCard, S
 INSERT INTO Tags (TagName) VALUES ('Multiplayer'), ('Singleplayer'), ('Co-op'), ('Open World'), ('Story Rich'), ('Difficult'), ('Sci-Fi'), ('Fantasy'), ('FPS'), ('Indie');
 
 -- 8. Game_Category
-INSERT INTO Game_Category (GameID, CategoryID) VALUES 
-(1, 1), (1, 7), (2, 1), (3, 1), (3, 7), (4, 2), (5, 2), (6, 1), (7, 5), (8, 2), (9, 8), (10, 1), (10, 9);
+INSERT INTO Game_Category (GameID, CategoryID) VALUES
+(1, 1), (1, 7), (1, 4), (2, 1), (2, 7), (3, 1), (3, 7), (4, 6), (4, 1), (5, 2), (5, 7), (6, 2), (6, 1), (7, 2), (7, 1), (7, 4), (8, 2), (8, 3), (9, 3), (10, 3), (11, 4), (11, 3), (12, 1), (13, 6), (13, 1), (14, 1), (14, 3), (15, 5), (16, 5), (16, 4), (17, 5), (17, 4), (18, 4), (18, 2), (19, 4), (20, 8), (20, 7);
 
 -- 9. Game_Tag
 INSERT INTO Game_Tag (GameID, TagID) VALUES
