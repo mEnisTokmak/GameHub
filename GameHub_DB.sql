@@ -316,7 +316,32 @@ INSERT INTO Wishlist (UserID, GameID) VALUES
 
 -- 15. Reviews
 INSERT INTO Reviews (UserID, GameID, Rating, Comment) VALUES
-(5, 2, 10, 'Great game.'), (6, 5, 9, 'Very hard but fun.'), (3, 3, 8, 'Graphics are super.'), (2, 10, 10, 'Masterpiece.'), (4, 7, 6, 'Same every year.'), (9, 10, 9, 'Music is legendary.'), (5, 9, 8, 'Scary.'), (6, 2, 5, 'Too many cheaters.'), (3, 4, 10, 'Story is perfect.'), (2, 6, 7, 'It is okay.');
+(2, 1, 10, 'Still the king of open world games. Legendary.'),
+(3, 1, 9, 'Great story, but online mode has too many hackers.'),
+(4, 2, 10, 'A true masterpiece. The story is emotional and deep.'),
+(5, 2, 10, 'Visuals are breathtaking. Arthur Morgan is a legend.'),
+(2, 3, 10, 'Combat is satisfying and the graphics are insane.'),
+(9, 3, 9, 'Kratos is back and better than ever. Boy!'),
+(3, 4, 9, 'Great remake, the atmosphere is terrifying.'),
+(3, 5, 10, 'Best RPG ever made. The story is incredible.'),
+(6, 5, 10, 'I spent more time playing Gwent than the actual game.'),
+(5, 6, 9, 'Very difficult but the world design is beautiful.'),
+(9, 6, 10, 'I died 100 times but I cannot stop playing.'),
+(2, 7, 8, 'Night City looks amazing. Gameplay is much better now.'),
+(4, 8, 10, 'The amount of choices in this game is mind-blowing.'),
+(3, 9, 8, 'Just one more turn... very addictive strategy game.'),
+(5, 10, 9, 'Classic strategy feeling with modern graphics.'),
+(6, 11, 5, 'Optimization is bad, my PC is struggling.'),
+(6, 12, 7, 'Graphics are good but hitboxes feel weird.'),
+(4, 12, 8, 'Tactical gameplay is unmatched, needs better anti-cheat.'),
+(2, 13, 9, 'Playing co-op with friends is hilarious.'),
+(5, 14, 8, 'Steep learning curve but very rewarding when you win.'),
+(3, 15, 6, 'Same game as last year, but fun with friends.'),
+(4, 16, 9, 'Driving feels very realistic with a steering wheel.'),
+(6, 17, 10, 'Mexico map is huge and beautiful. Best racing game.'),
+(4, 18, 10, 'So relaxing and peaceful. I love this game.'),
+(5, 19, 9, 'Driving trucks while listening to radio is therapy.'),
+(6, 20, 10, 'Best puzzle game ever. The dialogue is hilarious.');
 
 -- 16. Achievements
 INSERT INTO Achievements (GameID, Title, Description) VALUES
