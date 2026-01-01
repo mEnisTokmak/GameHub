@@ -61,8 +61,8 @@ CREATE TABLE Games (
     ReleaseDate DATE,
     SizeGB DECIMAL(5, 2),
     IsApproved TINYINT DEFAULT 1, -- Backend kontrolü için gerekli
-    ImageUrl VARCHAR(255) DEFAULT 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/library_600x900.jpg',
-    HeaderUrl VARCHAR(255) DEFAULT 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/library_hero.jpg',
+    ImageUrl VARCHAR(255) DEFAULT 'https://placehold.co/600x900?text=GAMEHUB',
+    HeaderUrl VARCHAR(255) DEFAULT 'https://placehold.co/600x900?text=GAMEHUB',
     FOREIGN KEY (DeveloperID) REFERENCES Developers(DeveloperID) ON DELETE CASCADE
 );
 
