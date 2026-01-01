@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+// Config dosyasını dahil ediyoruz (bir üst klasöre çıkarak)
+import { API_URL } from '../config';
 
 function AddGame() {
   const [form, setForm] = useState({ title: '', description: '', price: '' });
@@ -18,7 +20,8 @@ function AddGame() {
     console.log("Gönderiliyor...", form); // Hata ayıklama için
 
     try {
-        const res = await fetch('http://localhost/GameHub/GameHub/backend/add_game.php', {
+        // URL güncellendi: Artık config.js'den gelen API_URL'i kullanıyor
+        const res = await fetch(`${API_URL}/add_game.php`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ 
@@ -30,17 +33,17 @@ function AddGame() {
         const result = await res.json();
         console.log("Backend Cevabı:", result);
 
-        alert(result.message);
+        alert(result.message || "İşlem tamamlandı.");
         if(result.status === 'success') navigate('/');
 
     } catch (error) {
         console.error("Hata:", error);
-        alert("Bağlantı hatası oluştu!");
+        alert("Bağlantı hatası oluştu! Backend'in çalıştığından emin olun.");
     }
   };
 
-  // Eğer kullanıcı giriş yapmamışsa veya yetkisi yoksa uyar
-  if (!user) return <div style={{color:'white', padding:'20px'}}>Lütfen giriş yapın.</div>;
+  // Eğer kullanıcı giriş yapmamışsa uyar
+  if (!user) return <div style={{color:'white', padding:'20px'}}>Bu sayfayı görüntülemek için lütfen giriş yapın.</div>;
 
   return (
     <div className="login-box" style={{width: '600px', margin: '50px auto'}}>
@@ -49,20 +52,30 @@ function AddGame() {
         <input 
             type="text" 
             placeholder="Oyun Adı" 
-            value={form.title}
+            value={form.title} // value state'e bağlandı
             onChange={e => setForm({...form, title: e.target.value})} 
             required 
         />
         <textarea 
             placeholder="Oyun Açıklaması" 
-            value={form.description}
+            value={form.description} // value state'e bağlandı
             onChange={e => setForm({...form, description: e.target.value})} 
-            style={{width:'100%', background:'#32353c', color:'white', border:'1px solid #000', padding:'10px', minHeight:'100px', marginBottom:'10px', borderRadius:'2px'}}
+            style={{
+                width:'100%', 
+                background:'#32353c', 
+                color:'white', 
+                border:'1px solid #000', 
+                padding:'10px', 
+                minHeight:'100px', 
+                marginBottom:'10px', 
+                borderRadius:'2px',
+                fontFamily: 'sans-serif' // Yazı tipini düzelttik
+            }}
         />
         <input 
             type="number" 
             placeholder="Fiyat (TL)" 
-            value={form.price}
+            value={form.price} // value state'e bağlandı
             onChange={e => setForm({...form, price: e.target.value})} 
             required 
         />

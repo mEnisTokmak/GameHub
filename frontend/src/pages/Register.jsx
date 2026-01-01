@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+// Config dosyasını dahil ediyoruz (bir üst klasöre çıkarak)
+import { API_URL } from '../config';
 
 function Register() {
   const [formData, setFormData] = useState({username: '', email: '', password: ''});
@@ -7,19 +9,25 @@ function Register() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    // PHP'ye istek atıyoruz
-    const res = await fetch('http://localhost/GameHub/GameHub/backend/register.php', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(formData)
-    });
-    const result = await res.json();
     
-    if(result.status === 'success') {
-        alert(result.message);
-        navigate('/login'); // Başarılıysa giriş sayfasına git
-    } else {
-        alert(result.message);
+    try {
+        // URL güncellendi: Config dosyasından geliyor
+        const res = await fetch(`${API_URL}/register.php`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(formData)
+        });
+        const result = await res.json();
+        
+        if(result.status === 'success') {
+            alert(result.message);
+            navigate('/login'); // Başarılıysa giriş sayfasına git
+        } else {
+            alert(result.message);
+        }
+    } catch (error) {
+        console.error("Kayıt hatası:", error);
+        alert("Sunucuya bağlanılamadı. Backend'in çalıştığından emin olun.");
     }
   };
 
@@ -30,18 +38,21 @@ function Register() {
         <input 
             type="text" 
             placeholder="Kullanıcı Adı" 
+            value={formData.username} // State ile inputu bağladık
             onChange={e => setFormData({...formData, username: e.target.value})} 
             required 
         />
         <input 
             type="email" 
             placeholder="E-Posta Adresi" 
+            value={formData.email} // State ile inputu bağladık
             onChange={e => setFormData({...formData, email: e.target.value})} 
             required 
         />
         <input 
             type="password" 
             placeholder="Parola" 
+            value={formData.password} // State ile inputu bağladık
             onChange={e => setFormData({...formData, password: e.target.value})} 
             required 
         />

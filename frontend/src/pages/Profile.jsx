@@ -1,54 +1,75 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+// Config dosyasını dahil ediyoruz
+import { API_URL } from '../config';
 
 function Profile() {
-  const [user, setUser] = useState(null);
+  // DÜZELTME 1: User bilgisini en başta güvenli şekilde alıyoruz (Lazy Init)
+  const [user, setUser] = useState(() => {
+      const stored = localStorage.getItem('user');
+      return stored ? JSON.parse(stored) : null;
+  });
+
   const [amount, setAmount] = useState('');
-  const [myGames, setMyGames] = useState([]); // Kütüphane listesi
+  const [myGames, setMyGames] = useState([]); 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (!storedUser) {
+    // Eğer kullanıcı yoksa login'e at
+    if (!user) {
       navigate('/login');
-    } else {
-      const parsedUser = JSON.parse(storedUser);
-      setUser(parsedUser);
-      fetchLibrary(parsedUser.UserID); // Kütüphaneyi çek
+      return;
     }
-  }, []);
 
-  // Backend'den kütüphaneyi çeken fonksiyon
-  const fetchLibrary = async (userId) => {
-    try {
-        const res = await fetch(`http://localhost/GameHub/GameHub/backend/get_library.php?user_id=${userId}`);
-        const data = await res.json();
-        setMyGames(data);
-    } catch (error) {
-        console.error("Kütüphane hatası:", error);
-    }
-  };
+    // DÜZELTME 2: fetchLibrary fonksiyonunu useEffect'in İÇİNE aldık.
+    // Bu sayede "variable used before declaration" hatası çözüldü.
+    const fetchLibrary = async () => {
+        try {
+            // URL güncellendi: API_URL kullanıldı
+            const res = await fetch(`${API_URL}/get_library.php?user_id=${user.UserID}`);
+            const data = await res.json();
+            setMyGames(Array.isArray(data) ? data : []);
+        } catch (error) {
+            console.error("Kütüphane hatası:", error);
+        }
+    };
+
+    fetchLibrary();
+
+  }, [user, navigate]); // User değişirse (örneğin bakiye güncellenirse) burası tekrar çalışmaz, güvenli.
 
   const handleDeposit = async (e) => {
     e.preventDefault();
     if(amount <= 0) return alert("Geçerli tutar girin!");
 
-    const res = await fetch('http://localhost/GameHub/GameHub/backend/deposit.php', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ user_id: user.UserID, amount: amount })
-    });
-    const result = await res.json();
+    try {
+        // URL güncellendi
+        const res = await fetch(`${API_URL}/deposit.php`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ user_id: user.UserID, amount: amount })
+        });
+        const result = await res.json();
 
-    if(result.status === 'success') {
-        alert(result.message);
-        const updatedUser = { ...user, Balance: result.new_balance };
-        setUser(updatedUser);
-        localStorage.setItem('user', JSON.stringify(updatedUser));
-        setAmount('');
-        window.location.reload(); 
-    } else {
-        alert(result.message);
+        if(result.status === 'success') {
+            alert(result.message);
+            
+            // Kullanıcı bakiyesini güncelle
+            const updatedUser = { ...user, Balance: result.new_balance };
+            setUser(updatedUser);
+            localStorage.setItem('user', JSON.stringify(updatedUser));
+            
+            setAmount('');
+            // Navbar'daki bakiyenin güncellenmesi için event tetikle
+            window.dispatchEvent(new Event("storage")); 
+            
+            // Sayfayı komple yenilemeye gerek yok, React state'i halleder.
+        } else {
+            alert(result.message);
+        }
+    } catch (error) {
+        console.error("Para yükleme hatası:", error);
+        alert("Bağlantı hatası oluştu.");
     }
   };
 
@@ -60,7 +81,7 @@ function Profile() {
       {/* Üst Kısım: Profil Özeti */}
       <div style={{display: 'flex', gap: '30px', alignItems: 'flex-start', borderBottom: '1px solid #3d4c53', paddingBottom: '30px', flexWrap:'wrap'}}>
         
-        {/* AVATAR (GÜNCELLENDİ: Dinamik Resim) */}
+        {/* AVATAR */}
         <img 
             src={user.Avatar || "https://avatars.akamai.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg"} 
             alt="Avatar" 
@@ -70,7 +91,7 @@ function Profile() {
         <div style={{flex: 1}}>
            <h1 style={{fontSize:'2.5rem', margin:'0 0 10px 0'}}>{user.Username}</h1>
            
-           {/* HAKKIMDA YAZISI (GÜNCELLENDİ) */}
+           {/* HAKKIMDA YAZISI */}
            <p style={{color: '#acb2b8', fontStyle:'italic', background:'#16202d', padding:'10px', borderRadius:'4px', maxWidth:'600px'}}>
                {user.About || "Bu kullanıcı henüz kendisi hakkında bir şey yazmadı."}
            </p>
@@ -82,7 +103,13 @@ function Profile() {
         <div style={{background: '#1b2838', padding: '20px', borderRadius: '4px', minWidth: '300px'}}>
             <h3 style={{marginTop:0, color:'#a4d007'}}>Bakiye: {user.Balance} TL</h3>
             <form onSubmit={handleDeposit} style={{display:'flex', gap:'10px'}}>
-                <input type="number" placeholder="Tutar" value={amount} onChange={(e) => setAmount(e.target.value)} style={{width:'100%', padding:'10px', background:'#0e141b', border:'1px solid #66c0f4', color:'white'}} />
+                <input 
+                    type="number" 
+                    placeholder="Tutar" 
+                    value={amount} 
+                    onChange={(e) => setAmount(e.target.value)} 
+                    style={{width:'100%', padding:'10px', background:'#0e141b', border:'1px solid #66c0f4', color:'white'}} 
+                />
                 <button className="steam-btn" type="submit">Yükle</button>
             </form>
         </div>
@@ -104,6 +131,7 @@ function Profile() {
                         <img 
                             src={`https://steamcdn-a.akamaihd.net/steam/apps/${parseInt(game.GameID) + 10}/header.jpg`} 
                             style={{width: '100%', borderRadius: '4px'}} 
+                            onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/200x100?text=Oyun'; }}
                         />
                         <div style={{marginTop: '5px', fontSize: '0.9rem'}}>{game.Title}</div>
                     </div>

@@ -1,35 +1,61 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+// Config dosyasını dahil ediyoruz
+import { API_URL } from '../config';
 
 function Settings() {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem('user'));
   
+  // Kullanıcıyı güvenli şekilde al (Lazy Init)
+  const [user] = useState(() => {
+      const stored = localStorage.getItem('user');
+      return stored ? JSON.parse(stored) : null;
+  });
+
   const [formData, setFormData] = useState({
     avatar: user?.Avatar || '',
     about: user?.About || '',
     password: ''
   });
 
+  // Kullanıcı giriş yapmamışsa login sayfasına at
+  useEffect(() => {
+      if(!user) navigate('/login');
+  }, [user, navigate]);
+
   const handleUpdate = async (e) => {
     e.preventDefault();
-    const res = await fetch('http://localhost/GameHub/GameHub/backend/update_profile.php', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ ...formData, user_id: user.UserID })
-    });
-    const result = await res.json();
+    
+    try {
+        // URL güncellendi: API_URL kullanıldı
+        const res = await fetch(`${API_URL}/update_profile.php`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ ...formData, user_id: user.UserID })
+        });
+        const result = await res.json();
 
-    if(result.status === 'success') {
-        alert(result.message);
-        localStorage.setItem('user', JSON.stringify(result.user)); // Hafızayı güncelle
-        navigate('/profile'); // Profile dön
-    } else {
-        alert(result.message);
+        if(result.status === 'success') {
+            alert(result.message);
+            
+            // 1. LocalStorage'ı güncelle (Yeni avatar ve bilgilerle)
+            localStorage.setItem('user', JSON.stringify(result.user)); 
+            
+            // 2. Navbar'daki avatarın anında değişmesi için event tetikle (ÖNEMLİ)
+            window.dispatchEvent(new Event("storage"));
+
+            // 3. Profile dön
+            navigate('/profile'); 
+        } else {
+            alert(result.message);
+        }
+    } catch (error) {
+        console.error("Güncelleme hatası:", error);
+        alert("Sunucuya bağlanılamadı.");
     }
   };
 
-  if(!user) return <div>Giriş yapmalısınız.</div>;
+  if(!user) return <div style={{color:'white', padding:'20px'}}>Lütfen giriş yapın...</div>;
 
   return (
     <div className="login-box" style={{width:'600px', marginTop:'50px'}}>
@@ -47,7 +73,15 @@ function Settings() {
         <textarea 
             value={formData.about}
             onChange={e => setFormData({...formData, about: e.target.value})}
-            style={{width:'100%', background:'#32353c', color:'white', border:'1px solid black', padding:'10px', minHeight:'100px'}}
+            style={{
+                width:'100%', 
+                background:'#32353c', 
+                color:'white', 
+                border:'1px solid black', 
+                padding:'10px', 
+                minHeight:'100px',
+                fontFamily: 'sans-serif'
+            }}
         />
 
         <label style={{color:'white', display:'block', marginBottom:'5px', marginTop:'15px'}}>Yeni Şifre (Değiştirmek istemiyorsan boş bırak):</label>

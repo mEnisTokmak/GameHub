@@ -11,13 +11,13 @@ import AdminPanel from './pages/AdminPanel'
 import Community from './pages/Community'
 import Settings from './pages/Settings'
 import './App.css'
+import { API_URL } from './config'
+import logo from './assets/logo.png'; // Dosya uzantın .svg ise .svg yap
 
-// --- NAVBAR BİLEŞENİ (BUTONLAR GERİ GELDİ) ---
+// --- NAVBAR BİLEŞENİ ---
 function Navbar() {
   const user = JSON.parse(localStorage.getItem('user'));
   const [cartCount, setCartCount] = useState(0);
-  
-  // Arama State'leri
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ function Navbar() {
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
         setCartCount(cart.length);
     };
-    updateCount(); // İlk açılışta çalıştır
+    updateCount();
     window.addEventListener('storage', updateCount);
     return () => window.removeEventListener('storage', updateCount);
   }, []);
@@ -36,7 +36,7 @@ function Navbar() {
     setSearchTerm(term);
     if(term.length > 1) {
         try {
-            const res = await fetch(`http://localhost/GameHub/GameHub/backend/search_games.php?q=${term}`);
+            const res = await fetch(`${API_URL}/search_games.php?q=${term}`);
             const data = await res.json();
             setSearchResults(Array.isArray(data) ? data : []);
         } catch(e) { console.error(e); }
@@ -46,56 +46,50 @@ function Navbar() {
   };
 
   return (
-    <nav style={{display:'flex', justifyContent:'space-between', alignItems:'center', padding:'0 20px', background:'#171a21', height:'80px'}}>
-      
+    <nav>
       {/* SOL: LOGO VE LİNKLER */}
-      <div style={{display:'flex', alignItems:'center', gap:'30px'}}>
+      <div className="nav-left">
           <div className="logo">
-              <Link to="/" style={{color:'white', fontSize:'1.5rem', fontWeight:'bold', letterSpacing:'2px', textDecoration:'none'}}>GAMEHUB</Link>
+              <Link to="/">
+                <img 
+                  src={logo} 
+                    alt="GameHub Logo" 
+                    style={{height: '55px', display: 'block'}} /* Yüksekliği header'a göre ayarladık */
+                />
+              </Link>
           </div>
           
-          <div className="nav-links" style={{display:'flex', gap:'10px'}}>
+          <div className="nav-links">
             <Link to="/">MAĞAZA</Link>
             
-            {/* --- EKSİK OLAN BUTONLAR BURAYA EKLENDİ --- */}
-            
-            {/* 1. ADMIN BUTONU (Sadece RoleID = 1 ise görünür) */}
-            {user && user.RoleID === 1 && (
-                <Link to="/admin" style={{color:'#c0392b', borderBottom:'1px solid #c0392b'}}>⚠️ YÖNETİM</Link>
-            )}
-
-            {/* 2. GELİŞTİRİCİ BUTONU (Sadece RoleID = 2 ise görünür) */}
             {user && user.RoleID === 2 && (
-                <Link to="/add-game" style={{color:'#66c0f4', borderBottom:'1px solid #66c0f4'}}>OYUN EKLE</Link>
+                <Link to="/add-game">OYUN<br/>EKLE</Link> /* <br/> ile bilerek 2 satır yapabilirsin, CSS artık bunu ortalayacak */
             )}
 
-            {/* Diğer Linkler */}
             {user && <Link to="/community">TOPLULUK</Link>}
-            {user && <Link to="/wishlist">İSTEK LİSTESİ</Link>}
+            {user && <Link to="/wishlist">İSTEK<br/>LİSTESİ</Link>}
             {user && <Link to="/profile">KÜTÜPHANE</Link>}
             <Link to="/cart" style={{color: '#a4d007'}}>SEPET ({cartCount})</Link>
+            
+            {user && user.RoleID === 1 && (
+                <Link to="/admin" style={{color:'#c0392b'}}>YÖNETİM</Link>
+            )}
           </div>
       </div>
 
       {/* ORTA: ARAMA ÇUBUĞU */}
-      <div style={{position:'relative', width:'250px'}}>
+      <div className="nav-center">
          <input 
             type="text" 
-            placeholder="mağazada ara..." 
+            placeholder="Mağazada ara..." 
             value={searchTerm}
             onChange={(e) => handleSearch(e.target.value)}
-            style={{
-                background:'#2a3f5a', border:'none', 
-                color:'white', padding:'8px 15px', borderRadius:'3px', 
-                width:'100%', outline:'none', boxShadow:'inset 0 0 5px rgba(0,0,0,0.5)'
-            }}
          />
-         {/* Arama Sonuçları */}
          {searchResults.length > 0 && (
              <div style={{
                  position:'absolute', top:'100%', left:0, right:0, 
                  background:'#1b2838', border:'1px solid #3d4c53', 
-                 zIndex:1000, boxShadow:'0 5px 15px rgba(0,0,0,0.5)'
+                 zIndex:1000, boxShadow:'0 5px 15px rgba(0,0,0,0.5)', borderRadius:'0 0 6px 6px'
              }}>
                  {searchResults.map(game => (
                      <div 
@@ -106,7 +100,7 @@ function Navbar() {
                             setSearchResults([]);
                         }}
                         style={{
-                            padding:'10px', borderBottom:'1px solid #3d4c53', 
+                            padding:'12px', borderBottom:'1px solid rgba(255,255,255,0.05)', 
                             cursor:'pointer', display:'flex', justifyContent:'space-between',
                             color:'#c6d4df', fontSize:'0.9rem'
                         }}
@@ -121,23 +115,30 @@ function Navbar() {
          )}
       </div>
 
-      {/* SAĞ: KULLANICI */}
+      {/* SAĞ: KULLANICI AKSİYONLARI */}
       <div className="user-actions">
         {user ? (
-          <div style={{display: 'flex', gap: '15px', alignItems: 'center'}}>
-             <span style={{color: '#66c0f4', fontWeight:'bold'}}>{user.Balance} TL</span>
+          <>
+             <span className="balance-badge">{user.Balance} TL</span>
              
-             <div style={{display:'flex', flexDirection:'column', alignItems:'end'}}>
-                 <Link to="/profile" style={{color: 'white', fontWeight: 'bold', textDecoration:'none'}}>{user.Username}</Link>
-                 <Link to="/settings" style={{fontSize:'0.7rem', color:'#898989', textDecoration:'none'}}>Profili Düzenle</Link>
+             <div className="user-info">
+                 <Link to="/profile" className="username">{user.Username}</Link>
+                 <Link to="/settings" className="edit-profile">Profili Düzenle</Link>
              </div>
              
-             <button onClick={() => {localStorage.removeItem('user'); window.location.href='/';}} style={{background:'none', border:'none', color:'#898989', cursor:'pointer', fontSize:'0.8rem'}}>ÇIKIŞ</button>
-          </div>
+             <button 
+                onClick={() => {localStorage.removeItem('user'); window.location.href='/';}} 
+                style={{background:'transparent', border:'1px solid #333', color:'#898989', cursor:'pointer', padding:'8px 12px', borderRadius:'6px', transition:'all 0.2s'}}
+                onMouseEnter={e => {e.target.style.borderColor='#c0392b'; e.target.style.color='#c0392b'}}
+                onMouseLeave={e => {e.target.style.borderColor='#333'; e.target.style.color='#898989'}}
+             >
+                ÇIKIŞ
+             </button>
+          </>
         ) : (
           <div style={{display:'flex', gap:'15px'}}>
-            <Link to="/login" style={{color: 'white', textDecoration:'none'}}>Giriş Yap</Link>
-            <Link to="/register" style={{color: 'white', textDecoration:'none', background:'white', color:'black', padding:'5px 10px', borderRadius:'2px', fontWeight:'bold'}}>Kayıt Ol</Link>
+            <Link to="/login" style={{color: 'white', textDecoration:'none', fontWeight:'bold', display:'flex', alignItems:'center'}}>Giriş Yap</Link>
+            <Link to="/register" className="steam-btn" style={{padding:'8px 20px', fontSize:'0.9rem', textDecoration:'none'}}>Kayıt Ol</Link>
           </div>
         )}
       </div>
@@ -145,78 +146,103 @@ function Navbar() {
   )
 }
 
-// --- HOME BİLEŞENİ (MODERN HERO BANNER İLE) ---
+// --- HOME BİLEŞENİ ---
 function Home() {
-  const [games, setGames] = useState([])
+  const [games, setGames] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null); 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchCategories();
-    fetchGames(null);
-  }, [])
-
-  const fetchCategories = async () => {
+  const getGamesData = async (catId) => {
+    let url = `${API_URL}/get_games.php`;
+    if(catId) url += `?category_id=${catId}`;
     try {
-        const res = await fetch('http://localhost/GameHub/GameHub/backend/get_categories.php');
-        const data = await res.json();
-        setCategories(Array.isArray(data) ? data : []);
-    } catch (e) { console.error(e); }
+        const res = await fetch(url);
+        return await res.json();
+    } catch(e) { 
+        console.error(e); 
+        return [];
+    }
   };
 
-  const fetchGames = async (catId) => {
-    let url = 'http://localhost/GameHub/GameHub/backend/get_games.php';
-    if(catId) url += `?category_id=${catId}`;
-    const res = await fetch(url);
-    const data = await res.json();
-    setGames(data);
-    setSelectedCategory(catId);
+  useEffect(() => {
+    const initializeData = async () => {
+        try {
+            const res = await fetch(`${API_URL}/get_categories.php`);
+            const catData = await res.json();
+            setCategories(Array.isArray(catData) ? catData : []);
+        } catch(e) { console.error(e); }
+
+        const gamesData = await getGamesData(null);
+        setGames(gamesData);
+    };
+    initializeData();
+  }, []); 
+
+  const handleCategoryClick = async (catId) => {
+      setSelectedCategory(catId);
+      const data = await getGamesData(catId);
+      setGames(data);
   };
 
   return (
-    <div className="container" style={{maxWidth: '1200px', margin: '30px auto'}}>
+    <div className="container">
       
-      {/* 1. HERO BANNER (KAPAK RESMİ) */}
+      {/* HERO BANNER: Arkaplan resmi dinamik olduğu için style kalabilir, ama yazıları temizledik */}
       <div className="hero-banner" style={{backgroundImage: "url('https://cdn.akamai.steamstatic.com/steam/apps/1091500/library_hero.jpg')"}}>
           <div className="hero-overlay">
-              <h1 style={{fontSize:'3rem', margin:'0 0 10px 0', textShadow:'0 2px 10px black', color:'white'}}>CYBERPUNK 2077</h1>
-              <p style={{fontSize:'1.2rem', color:'#ccc', maxWidth:'600px'}}>
+              <h1 style={{fontSize:'3.5rem', margin:'0 0 15px 0', textShadow:'0 4px 20px black', color:'white', letterSpacing:'-1px'}}>CYBERPUNK 2077</h1>
+              <p style={{fontSize:'1.3rem', color:'#e0e0e0', maxWidth:'700px', lineHeight:'1.6'}}>
                   Geleceğin karanlık sokaklarında kendi efsaneni yaz. Açık dünya aksiyon-macera RPG'si şimdi GameHub'da.
               </p>
-              <button className="steam-btn" style={{width:'fit-content', fontSize:'1.1rem', marginTop:'20px'}}>HEMEN İNCELE</button>
+              <button className="steam-btn" style={{marginTop:'25px', padding:'15px 40px', fontSize:'1.2rem'}}>HEMEN İNCELE</button>
           </div>
       </div>
 
-      <div style={{display: 'flex', gap: '30px'}}>
+      <div style={{display: 'flex', gap: '40px', alignItems:'flex-start'}}>
         
-        {/* 2. SOL MENÜ */}
-        <div style={{minWidth: '220px', background: '#1e1e24', padding: '20px', borderRadius: '10px', height: 'fit-content'}}>
-          <h3 style={{color: '#66c0f4', marginTop: 0, borderBottom:'1px solid #333', paddingBottom:'10px'}}>KATEGORİLER</h3>
+        {/* SOL MENÜ */}
+        <div style={{minWidth: '240px', background: 'var(--bg-panel)', padding: '25px', borderRadius: '12px', height: 'fit-content', border:'1px solid rgba(255,255,255,0.05)'}}>
+          <h3 style={{color: '#66c0f4', marginTop: 0, borderBottom:'1px solid rgba(255,255,255,0.1)', paddingBottom:'15px', fontSize:'1.1rem', letterSpacing:'1px'}}>KATEGORİLER</h3>
           <ul style={{listStyle: 'none', padding: 0}}>
-              <li onClick={() => fetchGames(null)} style={{padding: '10px', cursor: 'pointer', color: selectedCategory === null ? 'white' : '#888'}}>🔥 Tüm Oyunlar</li>
+              <li 
+                onClick={() => handleCategoryClick(null)} 
+                style={{padding: '12px', cursor: 'pointer', borderRadius:'6px', color: selectedCategory === null ? 'white' : '#888', background: selectedCategory === null ? 'rgba(255,255,255,0.1)' : 'transparent', fontWeight: selectedCategory === null ? 'bold' : 'normal'}}
+              >
+                🔥 Tüm Oyunlar
+              </li>
+              
               {categories.map(cat => (
-                  <li key={cat.CategoryID} onClick={() => fetchGames(cat.CategoryID)} style={{padding: '10px', cursor: 'pointer', color: selectedCategory === cat.CategoryID ? 'white' : '#888'}}>
+                  <li 
+                    key={cat.CategoryID} 
+                    onClick={() => handleCategoryClick(cat.CategoryID)} 
+                    style={{padding: '12px', cursor: 'pointer', borderRadius:'6px', transition:'all 0.2s', color: selectedCategory === cat.CategoryID ? 'white' : '#888', background: selectedCategory === cat.CategoryID ? 'rgba(255,255,255,0.1)' : 'transparent'}}
+                  >
                       {cat.CategoryName}
                   </li>
               ))}
           </ul>
         </div>
 
-        {/* 3. OYUN LİSTESİ */}
+        {/* OYUN LİSTESİ */}
         <div style={{flex: 1}}>
-          <h2 style={{color: 'white', marginTop:0, borderLeft:'4px solid #66c0f4', paddingLeft:'15px'}}>MAĞAZA</h2>
+          <h2 style={{color: 'white', marginTop:0, borderLeft:'4px solid #66c0f4', paddingLeft:'20px', fontSize:'1.8rem'}}>MAĞAZA</h2>
+          
           <div className="game-grid">
             {games.map(game => (
               <div key={game.GameID} className="game-card" onClick={() => navigate(`/game/${game.GameID}`)}>
+                {/* IMG etiketi artık temiz, CSS'teki .game-card img class'ını kullanacak */}
                 <img 
                     src={`https://steamcdn-a.akamaihd.net/steam/apps/${parseInt(game.GameID) + 10}/header.jpg`} 
                     alt={game.Title} 
-                    onError={(e) => {e.target.src='https://via.placeholder.com/300x150?text=GAMEHUB'}} 
+                    onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = 'https://placehold.co/600x900?text=GAMEHUB'; 
+                    }} 
                 />
                 <h2>{game.Title}</h2>
                 <div className="footer">
-                    <span style={{color: '#a4d007', fontWeight:'bold'}}>{Number(game.Price) === 0 ? "Ücretsiz" : game.Price + " TL"}</span>
+                    <span style={{color: '#a4d007', fontWeight:'bold', fontSize:'1.1rem'}}>{Number(game.Price) === 0 ? "Ücretsiz" : game.Price + " TL"}</span>
                 </div>
               </div>
             ))}

@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+// Config dosyasını dahil ediyoruz
+import { API_URL } from '../config';
 
 function GameDetail() {
   const { id } = useParams();
@@ -13,23 +15,33 @@ function GameDetail() {
   const user = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
-    fetch(`http://localhost/GameHub/GameHub/backend/game_detail.php?id=${id}`)
-      .then(res => res.json())
-      .then(result => {
-          if(!result.info) {
-              alert("Bu oyun bulunamadı veya kaldırılmış.");
-              navigate('/');
-          }
-          setData(result);
-      })
-      .catch(err => console.error(err));
+    // useEffect içinde async fonksiyon tanımlamak en temiz yöntemdir
+    const fetchGameDetails = async () => {
+        try {
+            // URL güncellendi
+            const res = await fetch(`${API_URL}/game_detail.php?id=${id}`);
+            const result = await res.json();
+
+            if(!result.info) {
+                alert("Bu oyun bulunamadı veya kaldırılmış.");
+                navigate('/');
+                return;
+            }
+            setData(result);
+        } catch (err) {
+            console.error("Veri hatası:", err);
+        }
+    };
+
+    fetchGameDetails();
   }, [id, navigate]);
 
   // --- OYUN SİLME (Admin) ---
   const handleDeleteGame = async () => {
     if(!window.confirm("DİKKAT! Bu oyunu silmek üzeresin. Emin misin?")) return;
     try {
-        const res = await fetch('http://localhost/GameHub/GameHub/backend/admin_panel.php', {
+        // URL güncellendi
+        const res = await fetch(`${API_URL}/admin_panel.php`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ game_id: id, action: 'reject' }) 
@@ -45,34 +57,45 @@ function GameDetail() {
   // --- YORUM GÖNDERME ---
   const submitReview = async () => {
     if(!user) return alert("Giriş yapmalısın!");
-    const res = await fetch('http://localhost/GameHub/GameHub/backend/add_review.php', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ user_id: user.UserID, game_id: id, rating: userRating, comment: comment })
-    });
-    const result = await res.json();
-    if(result.status === 'success') {
-        alert("Yorum eklendi!");
-        window.location.reload();
-    } else alert(result.message);
+    
+    try {
+        // URL güncellendi
+        const res = await fetch(`${API_URL}/add_review.php`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ user_id: user.UserID, game_id: id, rating: userRating, comment: comment })
+        });
+        const result = await res.json();
+        if(result.status === 'success') {
+            alert("Yorum eklendi!");
+            window.location.reload();
+        } else alert(result.message);
+    } catch (error) {
+        console.error(error);
+    }
   };
 
   // --- YORUM SİLME (Admin) ---
   const handleDeleteReview = async (reviewUserId) => {
       if(!window.confirm("Bu yorumu silmek istiyor musun?")) return;
       
-      const res = await fetch('http://localhost/GameHub/GameHub/backend/delete_review.php', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ user_id: reviewUserId, game_id: id })
-      });
-      const result = await res.json();
-      
-      if(result.status === 'success') {
-          alert("Yorum silindi.");
-          window.location.reload();
-      } else {
-          alert("Hata: " + result.message);
+      try {
+        // URL güncellendi
+        const res = await fetch(`${API_URL}/delete_review.php`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ user_id: reviewUserId, game_id: id })
+        });
+        const result = await res.json();
+        
+        if(result.status === 'success') {
+            alert("Yorum silindi.");
+            window.location.reload();
+        } else {
+            alert("Hata: " + result.message);
+        }
+      } catch (error) {
+          console.error(error);
       }
   };
 
@@ -83,6 +106,23 @@ function GameDetail() {
       if (avg >= 7) return { text: "Olumlu", color: "#66c0f4" };
       if (avg >= 4) return { text: "Karışık", color: "#b9a074" };
       return { text: "Olumsuz", color: "#a34c25" };
+  };
+
+  // Wishlist Ekleme Fonksiyonu (Button içine gömülüydü, dışarı aldım daha temiz oldu)
+  const handleWishlist = async () => {
+      if(!user) return alert("Giriş yapmalısın!");
+      try {
+        // URL güncellendi
+        const res = await fetch(`${API_URL}/wishlist_action.php`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ user_id: user.UserID, game_id: id, action: 'add' })
+        });
+        const r = await res.json();
+        alert(r.message);
+      } catch (error) {
+          console.error(error);
+      }
   };
 
   if (!data || !data.info) return <div style={{color:'white', padding:'20px'}}>Yükleniyor...</div>;
@@ -101,7 +141,10 @@ function GameDetail() {
           <img 
             src={`https://steamcdn-a.akamaihd.net/steam/apps/${parseInt(id) + 10}/header.jpg`} 
             style={{width: '100%', borderRadius: '4px'}} 
-            onError={(e) => {e.target.src='https://via.placeholder.com/600x300?text=NO+IMAGE'}}
+            onError={(e) => {
+                e.target.onerror = null; // Sonsuz döngü koruması
+                e.target.src='https://via.placeholder.com/600x300?text=NO+IMAGE';
+            }}
           />
         </div>
 
@@ -154,16 +197,7 @@ function GameDetail() {
                  </button>
 
                  <button className="steam-btn" style={{width: 'auto', padding:'5px 15px', marginTop:0, marginLeft:'10px', background:'#2a475e'}}
-                     onClick={async () => {
-                         if(!user) return alert("Giriş yapmalısın!");
-                         const res = await fetch('http://localhost/GameHub/GameHub/backend/wishlist_action.php', {
-                             method: 'POST',
-                             headers: {'Content-Type': 'application/json'},
-                             body: JSON.stringify({ user_id: user.UserID, game_id: id, action: 'add' })
-                         });
-                         const r = await res.json();
-                         alert(r.message);
-                     }}>
+                     onClick={handleWishlist}>
                      ❤️
                  </button>
              </div>

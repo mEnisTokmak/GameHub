@@ -1,36 +1,48 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+// Config dosyasını dahil ediyoruz
+import { API_URL } from '../config';
 
 function Community() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [data, setData] = useState({ friends: [], requests: [] });
   
+  // Listeyi yenilemek için tetikleyici state
+  const [refreshKey, setRefreshKey] = useState(0);
+  
   const user = JSON.parse(localStorage.getItem('user'));
 
+  // DÜZELTME: fetchData fonksiyonunu useEffect'in İÇİNE aldık.
+  // Bu sayede "variable definition" hatası ve "dependency" hatası tamamen çözüldü.
   useEffect(() => {
-    if(user) fetchData();
-  }, []);
+    if(!user) return;
 
-  const fetchData = async () => {
-    try {
-        const res = await fetch(`http://localhost/GameHub/GameHub/backend/get_community.php?user_id=${user.UserID}`);
-        const result = await res.json();
-        // Backend'den gelen verinin boş veya hatalı olup olmadığını kontrol et
-        setData({
-            friends: Array.isArray(result.friends) ? result.friends : [],
-            requests: Array.isArray(result.requests) ? result.requests : []
-        });
-    } catch (error) {
-        console.error("Veri çekme hatası:", error);
-    }
-  };
+    const fetchData = async () => {
+        try {
+            // URL güncellendi: API_URL kullanıldı
+            const res = await fetch(`${API_URL}/get_community.php?user_id=${user.UserID}`);
+            const result = await res.json();
+            
+            setData({
+                friends: Array.isArray(result.friends) ? result.friends : [],
+                requests: Array.isArray(result.requests) ? result.requests : []
+            });
+        } catch (error) {
+            console.error("Veri çekme hatası:", error);
+        }
+    };
+
+    fetchData();
+
+    // refreshKey her değiştiğinde bu kod tekrar çalışır ve listeyi günceller
+  }, [user, refreshKey]);
 
   const handleSearch = async (term) => {
     setSearchTerm(term);
     if(term.length > 2) {
         try {
-            const res = await fetch(`http://localhost/GameHub/GameHub/backend/search_users.php?q=${term}&my_id=${user.UserID}`);
+            // URL güncellendi
+            const res = await fetch(`${API_URL}/search_users.php?q=${term}&my_id=${user.UserID}`);
             const result = await res.json();
             setSearchResults(Array.isArray(result) ? result : []);
         } catch (error) {
@@ -45,43 +57,47 @@ function Community() {
   const sendRequest = async (receiverId) => {
     if(!window.confirm("Bu kişiye arkadaşlık isteği göndermek istiyor musun?")) return;
 
-    console.log("Giden Veri:", { action: 'send', sender_id: user.UserID, receiver_id: receiverId });
-
     try {
-        const res = await fetch('http://localhost/GameHub/GameHub/backend/friend_action.php', {
+        // URL güncellendi
+        const res = await fetch(`${API_URL}/friend_action.php`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ action: 'send', sender_id: user.UserID, receiver_id: receiverId })
         });
         
         const result = await res.json();
-        console.log("Backend Cevabı:", result);
 
         if (result.message) {
-            alert(result.message); // "İstek gönderildi" veya "Zaten ekli" mesajı
+            alert(result.message); 
             setSearchTerm(""); 
             setSearchResults([]);
-            fetchData(); // Listeyi güncelle ki bekleyenlerde görünsün (eğer backend destekliyorsa)
+            
+            // Listeyi güncellemek için tetikleyiciyi çalıştır
+            setRefreshKey(old => old + 1); 
         } else if (result.error) {
             alert("Hata: " + result.error);
         }
     } catch (error) {
         console.error("Fetch Hatası:", error);
-        alert("Sunucuya bağlanılamadı. Konsolu kontrol et.");
+        alert("Sunucuya bağlanılamadı.");
     }
   };
 
   // --- KABUL ET / REDDET FONKSİYONU ---
   const respondRequest = async (requesterId, action) => {
     try {
-        const res = await fetch('http://localhost/GameHub/GameHub/backend/friend_action.php', {
+        // URL güncellendi
+        const res = await fetch(`${API_URL}/friend_action.php`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ action: action, sender_id: requesterId, receiver_id: user.UserID })
         });
         const result = await res.json();
         alert(result.message || "İşlem yapıldı.");
-        fetchData(); // Listeyi yenile
+        
+        // Listeyi güncellemek için tetikleyiciyi çalıştır
+        setRefreshKey(old => old + 1);
+
     } catch (error) {
         console.error("Yanıt hatası:", error);
     }

@@ -1,40 +1,47 @@
 import { useEffect, useState } from 'react';
+import { API_URL } from '../config';
 
 function AdminPanel() {
   const [pendingGames, setPendingGames] = useState([]);
+  
+  // Bu state sadece sayfayı yenilemek için bir tetikleyici olarak kullanılacak
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
+    // Fonksiyonu useEffect'in içinde tanımlıyoruz.
+    // Böylece "dependency" veya "hoisting" sorunları tamamen ortadan kalkıyor.
+    const fetchGames = async () => {
+      try {
+          const res = await fetch(`${API_URL}/admin_panel.php`);
+          const data = await res.json();
+          setPendingGames(Array.isArray(data) ? data : []);
+      } catch (error) {
+          console.error("Veri çekme hatası:", error);
+      }
+    };
+
     fetchGames();
-  }, []);
+    
+    // refreshKey her değiştiğinde bu useEffect tekrar çalışır ve listeyi yeniler
+  }, [refreshKey]); 
 
-  // Bekleyen oyunları getir
-  const fetchGames = async () => {
-    try {
-        const res = await fetch('http://localhost/GameHub/GameHub/backend/admin_panel.php');
-        const data = await res.json();
-        // Eğer hata mesajı geldiyse veya veri boşsa dizi yap
-        setPendingGames(Array.isArray(data) ? data : []);
-    } catch (error) {
-        console.error("Veri çekme hatası:", error);
-    }
-  };
-
-  // Genel İşlem Fonksiyonu (Onayla veya Reddet)
+  // Genel İşlem Fonksiyonu
   const handleAction = async (id, actionType) => {
     if(!window.confirm(actionType === 'approve' ? 'Onaylıyor musun?' : 'Reddedip silmek istiyor musun?')) return;
 
     try {
-        const res = await fetch('http://localhost/GameHub/GameHub/backend/admin_panel.php', {
+        const res = await fetch(`${API_URL}/admin_panel.php`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ game_id: id, action: actionType }) // Hangi işlemi yapacağını gönderiyoruz
+            body: JSON.stringify({ game_id: id, action: actionType })
         });
         const result = await res.json();
         
         alert(result.message);
         
-        // Listeyi güncelle (Sayfayı yenilemeden kutuyu kaldırır)
-        fetchGames();
+        // Listeyi güncellemek için tetikleyiciyi 1 artırıyoruz.
+        // Bu, useEffect'in tekrar çalışmasını sağlar.
+        setRefreshKey(oldKey => oldKey + 1);
         
     } catch (error) {
         console.error("İşlem hatası:", error);
@@ -64,7 +71,6 @@ function AdminPanel() {
                     </div>
                     
                     <div style={{display:'flex', gap:'10px'}}>
-                        {/* ONAYLA BUTONU */}
                         <button 
                             className="steam-btn" 
                             style={{width:'auto', background:'linear-gradient(to right, #27ae60, #2ecc71)', padding:'10px 20px'}}
@@ -73,7 +79,6 @@ function AdminPanel() {
                             ✓ ONAYLA
                         </button>
 
-                        {/* REDDET BUTONU */}
                         <button 
                             className="steam-btn" 
                             style={{width:'auto', background:'linear-gradient(to right, #c0392b, #e74c3c)', padding:'10px 20px'}}
