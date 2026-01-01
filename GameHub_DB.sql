@@ -60,7 +60,9 @@ CREATE TABLE Games (
     Price DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
     ReleaseDate DATE,
     SizeGB DECIMAL(5, 2),
-    IsApproved TINYINT DEFAULT 1, -- YENİ EKLENDİ
+    IsApproved TINYINT DEFAULT 1, -- Backend kontrolü için gerekli
+    ImageUrl VARCHAR(255) DEFAULT 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/library_600x900.jpg',
+    HeaderUrl VARCHAR(255) DEFAULT 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/library_hero.jpg',
     FOREIGN KEY (DeveloperID) REFERENCES Developers(DeveloperID) ON DELETE CASCADE
 );
 
@@ -207,17 +209,17 @@ CREATE TABLE PriceChangeLogs (
 INSERT INTO Roles (RoleName) VALUES ('Admin'), ('Gamer'), ('Developer'), ('Moderator'), ('Support'), ('Tester'), ('Editor'), ('Guest'), ('Bot'), ('Banned');
 
 -- 2. Users
-INSERT INTO Users (RoleID, Username, Email, Password, Balance) VALUES
-(1, 'GroupAdmin', 'admin@steamproject.com', 'admin123', 0.00),
-(2, 'AhmetKaan', 'ahmet@mail.com', 'pass1', 500.00),
-(2, 'MuhammetEnis', 'enis@mail.com', 'pass2', 1200.50),
-(2, 'EnverHalit', 'enver@mail.com', 'pass3', 3000.00),
-(2, 'MustafaGok', 'mustafa@mail.com', 'pass4', 150.00),
-(2, 'BurakKurt', 'burak@mail.com', 'pass5', 750.00),
-(3, 'ValveDev', 'contact@valve.com', 'securepass', 0.00),
-(3, 'RockstarDev', 'dev@rockstar.com', 'devpass', 0.00),
-(2, 'ProGamer_99', 'pro@mail.com', 'gamepass', 25.00),
-(2, 'CasualPlayer', 'casual@mail.com', '123456', 0.00);
+INSERT INTO Users (RoleID, Username, Email, Password, Balance, Avatar) VALUES
+(1, 'GroupAdmin', 'admin@steamproject.com', 'admin123', 0.00, 'https://avatars.githubusercontent.com/u/1?v=4'),
+(2, 'AhmetKaan', 'ahmet@mail.com', 'pass1', 500.00, 'https://avatars.githubusercontent.com/u/2?v=4'),
+(2, 'MuhammetEnis', 'enis@mail.com', 'pass2', 1200.50, 'https://avatars.githubusercontent.com/u/3?v=4'),
+(2, 'EnverHalit', 'enver@mail.com', 'pass3', 3000.00, 'https://avatars.githubusercontent.com/u/4?v=4'),
+(2, 'MustafaGok', 'mustafa@mail.com', 'pass4', 150.00, 'https://avatars.githubusercontent.com/u/5?v=4'),
+(2, 'BurakKurt', 'burak@mail.com', 'pass5', 750.00, 'https://avatars.githubusercontent.com/u/6?v=4'),
+(3, 'ValveDev', 'contact@valve.com', 'securepass', 0.00, DEFAULT),
+(3, 'RockstarDev', 'dev@rockstar.com', 'devpass', 0.00, DEFAULT),
+(2, 'ProGamer_99', 'pro@mail.com', 'gamepass', 25.00, DEFAULT),
+(2, 'CasualPlayer', 'casual@mail.com', '123456', 0.00, DEFAULT);
 
 -- 3. Developers
 INSERT INTO Developers (CompanyName, Website, FoundationYear) VALUES
@@ -236,17 +238,17 @@ INSERT INTO Developers (CompanyName, Website, FoundationYear) VALUES
 INSERT INTO Categories (CategoryName) VALUES ('Action'), ('RPG'), ('Strategy'), ('Simulation'), ('Sports'), ('Racing'), ('Adventure'), ('Horror'), ('Puzzle'), ('MMORPG');
 
 -- 5. Games
-INSERT INTO Games (DeveloperID, Title, Description, Price, ReleaseDate, SizeGB) VALUES
-(1, 'Half-Life 3', 'The legend returns.', 999.99, '2025-12-31', 60.5),
-(1, 'Counter-Strike 2', 'Tactical FPS.', 0.00, '2023-09-27', 30.0),
-(3, 'GTA VI', 'Expected open world game.', 1500.00, '2025-05-15', 150.0),
-(4, 'The Witcher 4', 'A new saga begins.', 1200.00, '2026-01-01', 85.0),
-(8, 'Elden Ring', 'Challenging RPG experience.', 899.00, '2022-02-25', 50.0),
-(2, 'Assassins Creed Mirage', 'Return to roots.', 900.00, '2023-10-05', 40.0),
-(5, 'FIFA 25', 'Football simulation.', 1100.00, '2024-09-28', 55.0),
-(6, 'Starfield', 'RPG set in space.', 1000.00, '2023-09-06', 125.0),
-(7, 'Resident Evil 4', 'Horror classic.', 850.00, '2023-03-24', 60.0),
-(10, 'Hollow Knight', 'Metroidvania style indie.', 150.00, '2017-02-24', 9.0);
+INSERT INTO Games (DeveloperID, Title, Description, Price, ReleaseDate, SizeGB, IsApproved, ImageUrl, HeaderUrl) VALUES
+(1, 'Half-Life 3', 'The legend returns.', 999.99, '2025-12-31', 60.5, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/546560/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/546560/library_hero.jpg'),
+(1, 'Counter-Strike 2', 'Tactical FPS.', 0.00, '2023-09-27', 30.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/library_hero.jpg'),
+(3, 'GTA VI', 'Expected open world game.', 1500.00, '2025-05-15', 150.0, 1, 'https://media-rockstargames-com.akamaized.net/tina-uploads/posts/7k7k5a4523314k/8563725f778d06746869400263f357675121287c.jpg', 'https://media-rockstargames-com.akamaized.net/tina-uploads/posts/7k7k5a4523314k/348d61749c25605d3b37535178602c3855a8264e.jpg'),
+(4, 'The Witcher 4', 'A new saga begins.', 1200.00, '2026-01-01', 85.0, 1, 'https://image.api.playstation.com/vulcan/ap/rnd/202211/0714/19d5c889f0744e7c27181f0868725612c62391b1580b067d.png', 'https://cdn-l-cyberpunk.cdprojektred.com/pl/witcher4-teaser-1920x1080-en.jpg'),
+(8, 'Elden Ring', 'Challenging RPG experience.', 899.00, '2022-02-25', 50.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/library_hero.jpg'),
+(2, 'Assassins Creed Mirage', 'Return to roots.', 900.00, '2023-10-05', 40.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2896650/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2896650/library_hero.jpg'),
+(5, 'FIFA 25', 'Football simulation.', 1100.00, '2024-09-28', 55.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2669320/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2669320/library_hero.jpg'),
+(6, 'Starfield', 'RPG set in space.', 1000.00, '2023-09-06', 125.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1716740/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1716740/library_hero.jpg'),
+(7, 'Resident Evil 4', 'Horror classic.', 850.00, '2023-03-24', 60.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2050650/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2050650/library_hero.jpg'),
+(10, 'Hollow Knight', 'Metroidvania style indie.', 150.00, '2017-02-24', 9.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/367520/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/367520/library_hero.jpg');
 
 -- 6. System Requirements
 INSERT INTO SystemRequirements (GameID, OS, Processor, MemoryGB, GraphicsCard, StorageGB) VALUES
