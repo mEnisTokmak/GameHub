@@ -1,17 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// Config dosyasını dahil ediyoruz
 import { API_URL } from '../config';
 
 function Wishlist() {
   const [games, setGames] = useState([]);
-  
-  // Listeyi yenilemek için tetikleyici
   const [refreshKey, setRefreshKey] = useState(0);
-  
   const navigate = useNavigate();
   
-  // Kullanıcıyı güvenli şekilde al
   const [user] = useState(() => {
       const stored = localStorage.getItem('user');
       return stored ? JSON.parse(stored) : null;
@@ -23,10 +18,8 @@ function Wishlist() {
         return;
     }
 
-    // Fonksiyonu useEffect içine alarak "used before defined" hatasını çözüyoruz
     const fetchWishlist = async () => {
         try {
-            // URL güncellendi: API_URL kullanıldı
             const res = await fetch(`${API_URL}/get_wishlist.php?user_id=${user.UserID}`);
             const data = await res.json();
             setGames(Array.isArray(data) ? data : []);
@@ -36,77 +29,113 @@ function Wishlist() {
     };
 
     fetchWishlist();
-
-    // refreshKey değiştiğinde (örn: bir ürün silindiğinde) liste tekrar çekilir
   }, [user, navigate, refreshKey]);
 
   const removeFromWishlist = async (gameId) => {
     try {
-        // URL güncellendi
         await fetch(`${API_URL}/wishlist_action.php`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ user_id: user.UserID, game_id: gameId, action: 'remove' })
         });
-        
-        // Listeyi yenilemek için tetikleyiciyi artırıyoruz
         setRefreshKey(old => old + 1);
-        
     } catch (error) {
         console.error("Silme hatası:", error);
-        alert("Bağlantı hatası oluştu.");
     }
   };
 
-  if (!user) return <div style={{color:'white', padding:'20px'}}>Yükleniyor...</div>;
+  if (!user) return <div style={{color:'white', padding:'50px', textAlign:'center'}}>Yükleniyor...</div>;
 
   return (
-    <div className="container" style={{color: 'white', marginTop: '40px'}}>
-      <h2 style={{borderBottom: '1px solid #3d4c53', paddingBottom:'10px'}}>İSTEK LİSTEM ({games.length})</h2>
+    <div className="container" style={{color: 'white', marginTop: '40px', paddingBottom:'50px'}}>
+      <h2 style={{borderBottom: '1px solid #3d4c53', paddingBottom:'15px', color:'white', display:'flex', alignItems:'center', gap:'10px'}}>
+          ❤️ İSTEK LİSTEM <span style={{fontSize:'1.2rem', color:'#66c0f4', fontWeight:'normal'}}>({games.length})</span>
+      </h2>
       
-      {games.length === 0 ? <p>Listeniz boş.</p> : (
-        <div style={{display:'flex', flexDirection:'column', gap:'10px'}}>
+      {games.length === 0 ? (
+          <div style={{background: 'rgba(255,255,255,0.05)', padding: '40px', textAlign: 'center', borderRadius: '8px', color: '#aaa'}}>
+              <p style={{fontSize:'1.2rem'}}>Listeniz şu an boş.</p>
+              <button className="steam-btn" onClick={() => navigate('/')} style={{marginTop:'10px'}}>Mağazaya Git</button>
+          </div>
+      ) : (
+        <div style={{display:'flex', flexDirection:'column', gap:'15px'}}>
             {games.map(game => (
-                <div key={game.GameID} style={{background: '#16202d', padding: '15px', display:'flex', justifyContent:'space-between', alignItems:'center', borderRadius:'4px'}}>
-                    <div style={{display:'flex', gap:'20px', alignItems:'center', cursor:'pointer'}} onClick={() => navigate(`/game/${game.GameID}`)}>
+                <div 
+                    key={game.GameID} 
+                    style={{
+                        background: 'rgba(22, 32, 45, 0.8)', 
+                        padding: '15px', 
+                        display:'flex', 
+                        justifyContent:'space-between', 
+                        alignItems:'center', 
+                        borderRadius:'6px',
+                        border: '1px solid rgba(255,255,255,0.05)',
+                        transition: 'background 0.2s'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(22, 32, 45, 1)'}
+                    onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(22, 32, 45, 0.8)'}
+                >
+                    <div style={{display:'flex', gap:'20px', alignItems:'center', cursor:'pointer', flex:1}} onClick={() => navigate(`/game/${game.GameID}`)}>
+                        
+                        {/* RESİM GÜNCELLEMESİ */}
                         <img 
-                            src={`https://steamcdn-a.akamaihd.net/steam/apps/${parseInt(game.GameID) + 10}/header.jpg`} 
-                            width="180" 
-                            style={{borderRadius:'4px'}} 
-                            onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/180x90?text=Oyun'; }}
+                            src={game.HeaderUrl || game.ImageUrl} // Varsa Yatay, yoksa Dikey
+                            alt={game.Title}
+                            style={{
+                                width: '180px', 
+                                height: '85px', 
+                                objectFit: 'cover', 
+                                borderRadius:'4px',
+                                boxShadow: '0 2px 5px black'
+                            }} 
+                            onError={(e) => { 
+                                e.target.onerror = null; 
+                                e.target.src = 'https://placehold.co/180x85?text=Oyun'; 
+                            }}
                         />
+                        
                         <div>
-                            <h3 style={{margin:0, color:'#66c0f4'}}>{game.Title}</h3>
-                            <span style={{color:'#898989'}}>Eklendi: {game.AddedDate}</span>
+                            <h3 style={{margin:0, color:'#c6d4df', fontSize:'1.3rem'}}>{game.Title}</h3>
+                            <div style={{color:'#56606a', fontSize:'0.85rem', marginTop:'5px'}}>
+                                Eklendi: {game.AddedDate || 'Tarih Yok'}
+                            </div>
+                            <div style={{color:'#a4d007', fontSize:'0.85rem', marginTop:'2px'}}>
+                                {game.Tags ? game.Tags : 'Windows'}
+                            </div>
                         </div>
                     </div>
                     
-                    <div style={{textAlign:'right'}}>
-                        <div style={{color:'#c6d4df', marginBottom:'10px'}}>{game.Price} TL</div>
-                        <button 
-                            className="steam-btn" 
-                            style={{width:'auto', fontSize:'0.8rem', marginRight:'10px'}}
-                            onClick={() => {
-                                // Sepete Ekleme Mantığı
-                                const cart = JSON.parse(localStorage.getItem('cart')) || [];
-                                if(!cart.find(i => i.GameID === game.GameID)) {
-                                    cart.push(game);
-                                    localStorage.setItem('cart', JSON.stringify(cart));
-                                    window.dispatchEvent(new Event("storage"));
-                                    alert("Sepete eklendi!");
-                                } else {
-                                    alert("Bu oyun zaten sepetinizde.");
-                                }
-                            }}
-                        >
-                            Sepete Ekle
-                        </button>
-                        <button 
-                            onClick={() => removeFromWishlist(game.GameID)} 
-                            style={{background:'none', border:'none', color:'#c0392b', textDecoration:'underline', cursor:'pointer'}}
-                        >
-                            Kaldır
-                        </button>
+                    <div style={{textAlign:'right', minWidth:'150px'}}>
+                        <div style={{color:'#c6d4df', marginBottom:'10px', fontSize:'1.1rem', fontWeight:'bold'}}>
+                            {Number(game.Price) === 0 ? "Ücretsiz" : `${game.Price} TL`}
+                        </div>
+                        
+                        <div style={{display:'flex', gap:'10px', justifyContent:'flex-end'}}>
+                            <button 
+                                className="steam-btn" 
+                                style={{padding:'8px 15px', fontSize:'0.9rem'}}
+                                onClick={() => {
+                                    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                                    if(!cart.find(i => i.GameID === game.GameID)) {
+                                        cart.push(game);
+                                        localStorage.setItem('cart', JSON.stringify(cart));
+                                        window.dispatchEvent(new Event("storage"));
+                                        alert("Sepete eklendi!");
+                                    } else {
+                                        alert("Bu oyun zaten sepetinizde.");
+                                    }
+                                }}
+                            >
+                                Sepete Ekle
+                            </button>
+                            <button 
+                                onClick={() => removeFromWishlist(game.GameID)} 
+                                style={{background:'rgba(0,0,0,0.2)', border:'1px solid #c0392b', color:'#c0392b', cursor:'pointer', padding:'8px', borderRadius:'4px'}}
+                                title="Listeden Kaldır"
+                            >
+                                ✕
+                            </button>
+                        </div>
                     </div>
                 </div>
             ))}

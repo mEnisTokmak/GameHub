@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-// Config dosyasını dahil ediyoruz
 import { API_URL } from '../config';
 
 function GameDetail() {
@@ -15,10 +14,8 @@ function GameDetail() {
   const user = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
-    // useEffect içinde async fonksiyon tanımlamak en temiz yöntemdir
     const fetchGameDetails = async () => {
         try {
-            // URL güncellendi
             const res = await fetch(`${API_URL}/game_detail.php?id=${id}`);
             const result = await res.json();
 
@@ -40,7 +37,6 @@ function GameDetail() {
   const handleDeleteGame = async () => {
     if(!window.confirm("DİKKAT! Bu oyunu silmek üzeresin. Emin misin?")) return;
     try {
-        // URL güncellendi
         const res = await fetch(`${API_URL}/admin_panel.php`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -57,9 +53,7 @@ function GameDetail() {
   // --- YORUM GÖNDERME ---
   const submitReview = async () => {
     if(!user) return alert("Giriş yapmalısın!");
-    
     try {
-        // URL güncellendi
         const res = await fetch(`${API_URL}/add_review.php`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -70,49 +64,32 @@ function GameDetail() {
             alert("Yorum eklendi!");
             window.location.reload();
         } else alert(result.message);
-    } catch (error) {
-        console.error(error);
-    }
+    } catch (error) { console.error(error); }
   };
 
   // --- YORUM SİLME (Admin) ---
   const handleDeleteReview = async (reviewUserId) => {
       if(!window.confirm("Bu yorumu silmek istiyor musun?")) return;
-      
       try {
-        // URL güncellendi
         const res = await fetch(`${API_URL}/delete_review.php`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ user_id: reviewUserId, game_id: id })
         });
         const result = await res.json();
-        
         if(result.status === 'success') {
             alert("Yorum silindi.");
             window.location.reload();
         } else {
             alert("Hata: " + result.message);
         }
-      } catch (error) {
-          console.error(error);
-      }
+      } catch (error) { console.error(error); }
   };
 
-  // Steam Tarzı Puan Yazısı
-  const getReviewLabel = (avg, count) => {
-      if (count === 0) return { text: "Henüz İnceleme Yok", color: "#898989" };
-      if (avg >= 8) return { text: "Çok Olumlu", color: "#66c0f4" };
-      if (avg >= 7) return { text: "Olumlu", color: "#66c0f4" };
-      if (avg >= 4) return { text: "Karışık", color: "#b9a074" };
-      return { text: "Olumsuz", color: "#a34c25" };
-  };
-
-  // Wishlist Ekleme Fonksiyonu (Button içine gömülüydü, dışarı aldım daha temiz oldu)
+  // --- WISHLIST EKLEME ---
   const handleWishlist = async () => {
       if(!user) return alert("Giriş yapmalısın!");
       try {
-        // URL güncellendi
         const res = await fetch(`${API_URL}/wishlist_action.php`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -120,149 +97,219 @@ function GameDetail() {
         });
         const r = await res.json();
         alert(r.message);
-      } catch (error) {
-          console.error(error);
-      }
+      } catch (error) { console.error(error); }
   };
 
-  if (!data || !data.info) return <div style={{color:'white', padding:'20px'}}>Yükleniyor...</div>;
+  // --- SEPETE EKLEME ---
+  const addToCart = () => {
+      const currentCart = JSON.parse(localStorage.getItem('cart')) || [];
+      if(currentCart.find(item => item.GameID === data.info.GameID)) return alert("Zaten sepette!");
+      currentCart.push(data.info);
+      localStorage.setItem('cart', JSON.stringify(currentCart));
+      window.dispatchEvent(new Event("storage"));
+      alert("Sepete eklendi!");
+  };
+
+  if (!data || !data.info) return <div style={{color:'white', padding:'50px', textAlign:'center'}}>Yükleniyor...</div>;
 
   const { info, requirements, tags, reviews, categories, rating_summary } = data;
-  const reviewStatus = getReviewLabel(rating_summary.average, rating_summary.total);
+  
+  // GÖRSEL SEÇİMİ (Veritabanı yoksa Placeholder)
+  const bgImage = info.HeaderUrl || info.ImageUrl || 'https://placehold.co/1920x1080?text=Header+Yok';
+  const coverImage = info.ImageUrl || 'https://placehold.co/600x900?text=Kapak+Yok';
 
   return (
-    <div className="container" style={{color: '#c6d4df', marginTop: '20px', paddingBottom:'50px'}}>
+    <div style={{minHeight: '100vh', paddingBottom: '50px'}}>
       
-      <h1 style={{textAlign:'left', color:'white', borderBottom:'none'}}>{info.Title}</h1>
-      
-      <div style={{display: 'flex', gap: '20px', flexWrap: 'wrap'}}>
-        {/* SOL: RESİM */}
-        <div style={{flex: '2'}}>
-          <img 
-            src={`https://steamcdn-a.akamaihd.net/steam/apps/${parseInt(id) + 10}/header.jpg`} 
-            style={{width: '100%', borderRadius: '4px'}} 
-            onError={(e) => {
-                e.target.onerror = null; // Sonsuz döngü koruması
-                e.target.src='https://via.placeholder.com/600x300?text=NO+IMAGE';
-            }}
-          />
-        </div>
+      {/* --- 1. HERO HEADER (SİNEMATİK) --- */}
+      <div style={{
+        position: 'relative',
+        width: '100%',
+        height: '500px',
+        backgroundImage: `url('${bgImage}')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center top',
+        boxShadow: 'inset 0 -150px 100px #0f1014' // Alttan karartma
+      }}>
+        <div style={{
+          position: 'absolute', inset: 0, 
+          background: 'linear-gradient(to bottom, rgba(15,16,20,0.3) 0%, rgba(15,16,20,1) 100%)'
+        }}></div>
 
-        {/* SAĞ: BİLGİ KUTUSU */}
-        <div style={{flex: '1', background: '#1b2838', padding: '15px', borderRadius: '4px'}}>
-          <p style={{fontSize:'0.9rem', lineHeight:'1.5'}}>{info.Description}</p>
-          
-          {/* İNCELEME ÖZETİ */}
-          <div style={{marginTop: '20px', background: '#121a25', padding:'10px', borderRadius:'4px'}}>
-             <div style={{display:'flex', justifyContent:'space-between', fontSize:'0.9rem'}}>
-                 <span style={{color: '#8f98a0'}}>BÜTÜN İNCELEMELER:</span>
-                 <span style={{color: reviewStatus.color, fontWeight:'bold', cursor:'pointer'}}>
-                     {reviewStatus.text} 
-                     <span style={{color:'#898989', fontWeight:'normal'}}> ({rating_summary.total})</span>
-                 </span>
+        <div className="container" style={{position: 'relative', height: '100%', display: 'flex', alignItems: 'flex-end', paddingBottom: '40px'}}>
+           <div>
+             <h1 style={{fontSize: '3.5rem', fontWeight: '900', margin: 0, color: 'white', textShadow: '0 4px 20px black', lineHeight: 1}}>
+               {info.Title}
+             </h1>
+             <div style={{marginTop:'15px', display:'flex', gap:'10px'}}>
+                {categories && categories.slice(0, 3).map((cat, idx) => (
+                    <span key={idx} style={{background:'rgba(255,255,255,0.1)', color:'#e0e0e0', padding:'5px 12px', borderRadius:'4px', fontSize:'0.8rem', backdropFilter:'blur(5px)'}}>
+                        {cat}
+                    </span>
+                ))}
              </div>
-             {rating_summary.total > 0 && (
-                 <div style={{textAlign:'right', fontSize:'0.8rem', color:'#898989', marginTop:'5px'}}>
-                     (Ortalama Puan: {rating_summary.average}/10)
-                 </div>
-             )}
-          </div>
-
-          <div style={{marginTop: '20px'}}>
-            <p style={{fontSize: '0.9rem', color: '#8f98a0'}}>
-                GELİŞTİRİCİ: <span style={{color: '#66c0f4'}}>{requirements?.CompanyName || 'Bilinmiyor'}</span>
-            </p>
-            <p style={{fontSize: '0.9rem', color: '#8f98a0'}}>
-                KATEGORİLER: <span style={{color: '#66c0f4'}}>{categories && categories.length > 0 ? categories.join(', ') : 'Belirtilmemiş'}</span>
-            </p>
-            <p style={{fontSize: '0.9rem', color: '#8f98a0'}}>
-                ETİKETLER: <span style={{color: '#66c0f4'}}>{tags?.AllTags || 'Yok'}</span>
-            </p>
-          </div>
-          
-          <div style={{background: 'black', padding: '10px', marginTop: '20px', display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-             <span>{Number(info.Price) === 0 ? "Ücretsiz" : info.Price + " TL"}</span>
-             
-             <div style={{display:'flex'}}>
-                 <button className="steam-btn" style={{width: 'auto', padding:'5px 20px', marginTop:0}}
-                     onClick={() => {
-                         const currentCart = JSON.parse(localStorage.getItem('cart')) || [];
-                         if(currentCart.find(item => item.GameID === info.GameID)) return alert("Zaten sepette!");
-                         currentCart.push(info);
-                         localStorage.setItem('cart', JSON.stringify(currentCart));
-                         window.dispatchEvent(new Event("storage"));
-                         alert("Sepete eklendi!");
-                     }}>
-                     Sepete Ekle
-                 </button>
-
-                 <button className="steam-btn" style={{width: 'auto', padding:'5px 15px', marginTop:0, marginLeft:'10px', background:'#2a475e'}}
-                     onClick={handleWishlist}>
-                     ❤️
-                 </button>
-             </div>
-          </div>
+           </div>
         </div>
       </div>
 
-      {/* ADMIN PANELİ (OYUN SİLME) */}
-      {user && user.RoleID === 1 && (
-          <div style={{marginTop: '30px', border: '2px solid #c0392b', background: '#2c0b0e', padding: '20px', borderRadius:'4px'}}>
-              <h3 style={{color: '#e74c3c', marginTop:0}}>⚠️ YÖNETİCİ İŞLEMLERİ</h3>
-              <button onClick={handleDeleteGame} style={{background: '#c0392b', color: 'white', border: 'none', padding: '10px 20px', cursor: 'pointer', borderRadius:'4px'}}>MAĞAZADAN KALDIR</button>
-          </div>
-      )}
-
-      {/* YORUM YAP */}
-      {user && (
-        <div style={{background: '#1b2838', padding: '20px', marginTop: '30px', borderRadius: '4px'}}>
-            <h3 style={{marginTop:0, color:'#66c0f4'}}>İnceleme Yaz</h3>
-            <div style={{marginBottom: '10px'}}>
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(s => (
-                    <span key={s} onClick={() => setUserRating(s)} style={{cursor:'pointer', fontSize:'1.5rem', color: s <= userRating ? '#ffd700' : '#555', marginRight: '5px'}}>★</span>
-                ))}
-                <span style={{marginLeft:'10px'}}>({userRating}/10)</span>
+      {/* --- 2. ANA İÇERİK IZGARASI --- */}
+      <div className="container" style={{display: 'flex', gap: '40px', marginTop: '-20px', position:'relative', zIndex: 10, alignItems: 'flex-start'}}>
+        
+        {/* SOL KOLON: Detaylar, Admin Paneli ve Yorumlar */}
+        <div style={{flex: 2}}>
+          
+          {/* AÇIKLAMA KUTUSU */}
+          <div style={{background: '#1b1f28', padding: '30px', borderRadius: '12px', border:'1px solid rgba(255,255,255,0.05)'}}>
+            <h2 style={{marginTop:0, borderBottom:'1px solid rgba(255,255,255,0.1)', paddingBottom:'15px', color:'white'}}>Oyun Hakkında</h2>
+            <p style={{fontSize: '1.1rem', lineHeight: '1.8', color: '#c6d4df', whiteSpace: 'pre-wrap'}}>
+              {info.Description}
+            </p>
+            
+            {/* ETİKETLER */}
+            <div style={{marginTop:'20px', paddingTop:'20px', borderTop:'1px solid rgba(255,255,255,0.05)', fontSize:'0.9rem', color:'#8f98a0'}}>
+                Etiketler: <span style={{color: '#66c0f4'}}>{tags?.AllTags || 'Yok'}</span>
             </div>
-            <textarea rows="3" placeholder="Düşüncelerin..." style={{width:'100%', background:'#2a3f5a', color:'white', border:'none', padding:'10px'}} value={comment} onChange={(e) => setComment(e.target.value)} />
-            <button className="steam-btn" onClick={submitReview} style={{width:'auto', marginTop:'10px'}}>Gönder</button>
-        </div>
-      )}
+          </div>
 
-      {/* YORUMLAR LİSTESİ */}
-      <div style={{marginTop: '40px'}}>
-        <h3 style={{color: '#fff'}}>MÜŞTERİ İNCELEMELERİ</h3>
-        {reviews.length === 0 ? <p>Henüz inceleme yok.</p> : (
-            reviews.map((rev, index) => (
-                <div key={index} style={{background: '#16202d', padding: '15px', marginBottom: '10px', borderRadius: '4px', display:'flex', gap:'15px', justifyContent:'space-between'}}>
-                    
-                    {/* YORUM İÇERİĞİ */}
-                    <div style={{display:'flex', gap:'15px', flex:1}}>
-                        <div style={{minWidth: '100px'}}>
-                             <div style={{fontWeight: 'bold', color: '#66c0f4'}}>{rev.Username}</div>
-                             <div style={{fontSize: '0.9rem', color: '#ffd700'}}>★ {rev.Rating}</div>
+          {/* ADMIN SİLME PANELİ (Sadece Admin Görür) */}
+          {user && user.RoleID === 1 && (
+              <div style={{marginTop: '30px', border: '1px solid #c0392b', background: 'rgba(192, 57, 43, 0.1)', padding: '20px', borderRadius:'12px'}}>
+                  <h3 style={{color: '#e74c3c', marginTop:0, display:'flex', alignItems:'center', gap:'10px'}}>
+                      ⚠️ YÖNETİCİ PANELİ
+                  </h3>
+                  <p style={{fontSize:'0.9rem', color:'#aaa'}}>Bu oyun mağaza kurallarına uymuyorsa buradan kaldırabilirsiniz.</p>
+                  <button onClick={handleDeleteGame} style={{background: '#c0392b', color: 'white', border: 'none', padding: '12px 24px', cursor: 'pointer', borderRadius:'6px', fontWeight:'bold'}}>
+                      OYUNU SİL
+                  </button>
+              </div>
+          )}
+
+          {/* YORUMLAR BÖLÜMÜ */}
+          <div style={{marginTop: '40px'}}>
+            <h3 style={{color: 'white', fontSize:'1.5rem'}}>KULLANICI İNCELEMELERİ <span style={{fontSize:'1rem', color:'#888', fontWeight:'normal'}}>({rating_summary.total})</span></h3>
+            
+            {/* YORUM YAZMA ALANI */}
+            {user && (
+                <div style={{background: '#16202d', padding: '20px', borderRadius: '8px', marginBottom:'30px', border:'1px solid rgba(255,255,255,0.05)'}}>
+                    <div style={{marginBottom: '10px', display:'flex', alignItems:'center', gap:'10px'}}>
+                        <span style={{color:'white'}}>Puanın:</span>
+                        <div>
+                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(s => (
+                                <span key={s} onClick={() => setUserRating(s)} style={{cursor:'pointer', fontSize:'1.5rem', color: s <= userRating ? '#ffd700' : '#444', marginRight: '3px'}}>★</span>
+                            ))}
                         </div>
-                        <div style={{borderLeft: '1px solid #3d4c53', paddingLeft: '15px', flex:1}}>
-                            <p style={{marginTop: 0, color: '#acb2b8'}}>{rev.Comment}</p>
-                            <small style={{color: '#56606a'}}>{rev.ReviewDate}</small>
+                        <span style={{color:'#aaa', fontSize:'0.9rem'}}>({userRating}/10)</span>
+                    </div>
+                    <textarea 
+                        rows="3" 
+                        placeholder="Bu oyun hakkında ne düşünüyorsun?" 
+                        style={{width:'100%', background:'#0f1216', color:'white', border:'1px solid #333', padding:'15px', borderRadius:'6px', outline:'none', resize:'vertical'}} 
+                        value={comment} 
+                        onChange={(e) => setComment(e.target.value)} 
+                    />
+                    <button className="steam-btn" onClick={submitReview} style={{marginTop:'15px', padding:'10px 30px'}}>İncelemeyi Gönder</button>
+                </div>
+            )}
+
+            {/* YORUM LİSTESİ */}
+            {reviews.length === 0 ? <p style={{color:'#888'}}>Henüz inceleme yok. İlk yorumu sen yaz!</p> : (
+                reviews.map((rev, index) => (
+                    <div key={index} style={{background: '#1b1f28', padding: '20px', marginBottom: '15px', borderRadius: '8px', border:'1px solid rgba(255,255,255,0.05)', display:'flex', gap:'20px'}}>
+                        <div style={{minWidth: '80px', textAlign:'center'}}>
+                             <div style={{width:'50px', height:'50px', background:'#2a475e', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto', fontSize:'1.2rem', fontWeight:'bold', color:'white'}}>
+                                 {rev.Username.charAt(0).toUpperCase()}
+                             </div>
+                             <div style={{marginTop:'10px', color: '#66c0f4', fontSize:'0.9rem', fontWeight:'bold', overflow:'hidden', textOverflow:'ellipsis'}}>{rev.Username}</div>
+                        </div>
+                        
+                        <div style={{flex:1}}>
+                            <div style={{display:'flex', justifyContent:'space-between', marginBottom:'10px'}}>
+                                <div style={{color: '#ffd700', fontSize:'1.1rem'}}>
+                                    {'★'.repeat(rev.Rating)}<span style={{color:'#444'}}>{'★'.repeat(10 - rev.Rating)}</span>
+                                </div>
+                                <small style={{color: '#56606a'}}>{rev.ReviewDate}</small>
+                            </div>
+                            <p style={{marginTop: 0, color: '#e0e0e0', lineHeight:'1.5'}}>{rev.Comment}</p>
+                            
+                            {/* ADMIN YORUM SİLME */}
+                            {user && user.RoleID === 1 && (
+                                <div style={{marginTop:'10px', textAlign:'right'}}>
+                                    <button 
+                                        onClick={() => handleDeleteReview(rev.UserID)}
+                                        style={{background: 'none', border:'none', color:'#c0392b', cursor:'pointer', fontSize:'0.8rem', display:'flex', alignItems:'center', gap:'5px', marginLeft:'auto'}}
+                                    >
+                                        🗑️ Yorumu Sil
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
+                ))
+            )}
+          </div>
 
-                    {/* YORUM SİL BUTONU (SADECE ADMIN) */}
-                    {user && user.RoleID === 1 && (
-                        <button 
-                            onClick={() => handleDeleteReview(rev.UserID)}
-                            style={{background: 'none', border:'none', color:'#c0392b', cursor:'pointer', fontWeight:'bold', fontSize:'1.5rem'}}
-                            title="Yorumu Sil"
-                        >
-                            🗑️
-                        </button>
-                    )}
+        </div>
 
+        {/* SAĞ KOLON: STICKY SATIN ALMA KARTI */}
+        <div style={{flex: 1, minWidth: '320px'}}>
+           <div style={{
+             background: 'rgba(27, 31, 40, 0.95)', 
+             padding: '25px', 
+             borderRadius: '12px', 
+             border: '1px solid rgba(102, 192, 244, 0.3)',
+             boxShadow: '0 10px 40px rgba(0,0,0,0.5)',
+             position: 'sticky',
+             top: '120px', // Navbar'ın altında kalsın diye
+             backdropFilter: 'blur(10px)'
+           }}>
+              <img src={coverImage} alt="Kapak" style={{width:'100%', borderRadius:'8px', marginBottom:'20px', boxShadow:'0 5px 15px rgba(0,0,0,0.5)'}} />
+              
+              <div style={{fontSize:'2rem', fontWeight:'bold', color:'white', marginBottom:'5px'}}>
+                {Number(info.Price) === 0 ? "Ücretsiz" : `${info.Price} TL`}
+              </div>
+              <div style={{fontSize:'0.9rem', color:'#a4d007', marginBottom:'20px'}}>
+                  {rating_summary.total > 0 ? `Ortalama Puan: ${rating_summary.average}/10` : 'Henüz puanlanmadı'}
+              </div>
+
+              <button 
+                className="steam-btn" 
+                onClick={addToCart}
+                style={{width: '100%', padding:'15px', fontSize:'1.1rem', marginBottom:'10px', display:'flex', justifyContent:'center', gap:'10px'}}
+              >
+                <span>🛒</span> Sepete Ekle
+              </button>
+
+              <button 
+                onClick={handleWishlist}
+                style={{
+                    width: '100%', padding:'12px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)', 
+                    color:'white', borderRadius:'6px', cursor:'pointer', transition: '0.3s', display:'flex', justifyContent:'center', gap:'10px'
+                }}
+                onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.1)'}
+                onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.05)'}
+              >
+                ❤️ İstek Listesine Ekle
+              </button>
+
+              <div style={{marginTop:'25px', borderTop:'1px solid rgba(255,255,255,0.1)', paddingTop:'20px', fontSize:'0.9rem', color:'#888'}}>
+                <div style={{display:'flex', justifyContent:'space-between', marginBottom:'8px'}}>
+                  <span>Geliştirici:</span>
+                  <span style={{color:'#66c0f4'}}>{requirements?.CompanyName || 'Bilinmiyor'}</span>
                 </div>
-            ))
-        )}
-      </div>
+                <div style={{display:'flex', justifyContent:'space-between', marginBottom:'8px'}}>
+                  <span>Yayın Tarihi:</span>
+                  <span style={{color:'white'}}>{info.ReleaseDate || 'Belli Değil'}</span>
+                </div>
+                <div style={{display:'flex', justifyContent:'space-between'}}>
+                  <span>Dosya Boyutu:</span>
+                  <span style={{color:'white'}}>{info.SizeGB || '?'} GB</span>
+                </div>
+              </div>
 
+           </div>
+        </div>
+
+      </div>
     </div>
   );
 }

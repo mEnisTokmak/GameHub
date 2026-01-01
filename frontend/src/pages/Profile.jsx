@@ -128,11 +128,19 @@ function Profile() {
             <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '20px'}}>
                 {myGames.map(game => (
                     <div key={game.GameID} style={{position: 'relative', cursor: 'pointer', transition: 'transform 0.2s'}} onClick={() => navigate(`/game/${game.GameID}`)}>
-                        <img 
-                            src={`https://steamcdn-a.akamaihd.net/steam/apps/${parseInt(game.GameID) + 10}/header.jpg`} 
-                            style={{width: '100%', borderRadius: '4px'}} 
-                            onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/200x100?text=Oyun'; }}
-                        />
+                    <img 
+                    src={game.ImageUrl} 
+                    alt={game.Title}
+                    style={{
+                        width: '100%', 
+                        aspectRatio: '2/3', // Standart poster oranı
+                        objectFit: 'cover'
+                    }} 
+                    onError={(e) => { 
+                        e.target.onerror = null; 
+                        e.target.src = 'https://placehold.co/600x900?text=Oyun'; 
+                    }}
+                />
                         <div style={{marginTop: '5px', fontSize: '0.9rem'}}>{game.Title}</div>
                     </div>
                 ))}

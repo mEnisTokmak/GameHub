@@ -77,38 +77,36 @@ function Navbar() {
           </div>
       </div>
 
-      {/* ORTA: ARAMA ÇUBUĞU */}
-      <div className="nav-center">
+      {/* --- ORTA: ARAMA ÇUBUĞU (CSS Class'lı Temiz Hali) --- */}
+      <div className="nav-center search-container">
          <input 
             type="text" 
             placeholder="Mağazada ara..." 
+            className="search-input"
             value={searchTerm}
             onChange={(e) => handleSearch(e.target.value)}
          />
+         
+         {/* ARAMA SONUÇLARI */}
          {searchResults.length > 0 && (
-             <div style={{
-                 position:'absolute', top:'100%', left:0, right:0, 
-                 background:'#1b2838', border:'1px solid #3d4c53', 
-                 zIndex:1000, boxShadow:'0 5px 15px rgba(0,0,0,0.5)', borderRadius:'0 0 6px 6px'
-             }}>
+             <div className="search-dropdown">
                  {searchResults.map(game => (
                      <div 
                         key={game.GameID}
+                        className="search-result-item"
                         onClick={() => {
                             navigate(`/game/${game.GameID}`);
                             setSearchTerm("");
                             setSearchResults([]);
                         }}
-                        style={{
-                            padding:'12px', borderBottom:'1px solid rgba(255,255,255,0.05)', 
-                            cursor:'pointer', display:'flex', justifyContent:'space-between',
-                            color:'#c6d4df', fontSize:'0.9rem'
-                        }}
-                        onMouseEnter={(e) => e.currentTarget.style.background = '#2a475e'}
-                        onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                      >
-                         <span>{game.Title}</span>
-                         <span style={{color:'#a4d007'}}>{game.Price} TL</span>
+                         <span className="search-game-title">
+                             {game.Title}
+                         </span>
+                         
+                         <span className="search-game-price">
+                             {Number(game.Price) === 0 ? "Ücretsiz" : `${game.Price} TL`}
+                         </span>
                      </div>
                  ))}
              </div>
@@ -233,10 +231,11 @@ function Home() {
               <div key={game.GameID} className="game-card" onClick={() => navigate(`/game/${game.GameID}`)}>
                 {/* IMG etiketi artık temiz, CSS'teki .game-card img class'ını kullanacak */}
                 <img 
-                    src={`https://steamcdn-a.akamaihd.net/steam/apps/${parseInt(game.GameID) + 10}/header.jpg`} 
+                    src={game.ImageUrl} 
                     alt={game.Title} 
                     onError={(e) => {
                         e.target.onerror = null;
+                        // Resim yüklenemezse placeholder göster
                         e.target.src = 'https://placehold.co/600x900?text=GAMEHUB'; 
                     }} 
                 />

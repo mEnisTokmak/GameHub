@@ -312,3 +312,79 @@ nav {
     border-radius: 16px;
     border: 1px solid rgba(255,255,255,0.05);
   }
+
+
+  /* --- ARAMA ÇUBUĞU STİLLERİ --- */
+
+/* Kapsayıcı: Input ve Sonuç kutusunu tutar */
+.search-container {
+  position: relative;
+  width: 100%;
+  max-width: 400px; /* Input'un maksimum genişliği */
+}
+
+/* Arama Inputu */
+.search-input {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  border-color: #66c0f4;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Açılan Sonuç Kutusu */
+.search-dropdown {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  width: 100%;
+  min-width: 350px; /* ÖNEMLİ: Kutunun dar kalmasını engelleyen kod */
+  background: #1b2838;
+  border: 1px solid #66c0f4;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+  z-index: 9999;
+  overflow: hidden;
+}
+
+/* Tekil Sonuç Satırı */
+.search-result-item {
+  display: flex;
+  justify-content: space-between; /* İsim sola, fiyat sağa */
+  align-items: center;
+  padding: 12px 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.search-result-item:hover {
+  background-color: #2a475e;
+}
+
+/* Oyun Başlığı (Taşmayı önler) */
+.search-game-title {
+  color: white;
+  font-weight: bold;
+  font-size: 0.95rem;
+  white-space: nowrap;     /* Alt satıra geçme */
+  overflow: hidden;        /* Taşanı gizle */
+  text-overflow: ellipsis; /* Sonuna ... koy */
+  max-width: 220px;        /* İsim çok uzunsa fiyatı ezmesin */
+}
+
+/* Oyun Fiyatı */
+.search-game-price {
+  color: #a4d007;
+  font-weight: bold;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
