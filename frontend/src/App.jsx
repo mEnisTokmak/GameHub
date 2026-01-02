@@ -193,8 +193,11 @@ function Home() {
               <p style={{fontSize:'1.3rem', color:'#e0e0e0', maxWidth:'700px', lineHeight:'1.6'}}>
                   Geleceğin karanlık sokaklarında kendi efsaneni yaz. Açık dünya aksiyon-macera RPG'si şimdi GameHub'da.
               </p>
-              <button className="steam-btn" style={{marginTop:'25px', padding:'15px 40px', fontSize:'1.2rem'}}>HEMEN İNCELE</button>
-          </div>
+              <Link to="/game/7">
+              <button className="steam-btn" style={{marginTop:'25px', padding:'15px 40px', fontSize:'1.2rem'}}>
+                  HEMEN İNCELE
+              </button>
+          </Link>          </div>
       </div>
 
       <div style={{display: 'flex', gap: '40px', alignItems:'flex-start'}}>
