@@ -267,16 +267,26 @@ INSERT INTO Games (DeveloperID, Title, Description, Price, ReleaseDate, SizeGB, 
 
 -- 6. System Requirements
 INSERT INTO SystemRequirements (GameID, OS, Processor, MemoryGB, GraphicsCard, StorageGB) VALUES
-(11, 'Windows 10', 'Intel i7 9700K', 16, 'RTX 3080', 60), -- Cities Skylines 2
-(12, 'Windows 10', 'Intel i5 7500', 8, 'GTX 1060', 85),  -- CS2
-(13, 'Windows 7', 'Intel Core 2 Duo', 4, 'GeForce 6600', 15), -- L4D2
-(14, 'Windows 10', 'Intel i5 4590', 8, 'GTX 960', 60), -- R6 Siege
-(15, 'Windows 10', 'Intel i7 6700', 12, 'GTX 1660', 100), -- FC 24
-(16, 'Windows 10', 'Intel i5 9600K', 16, 'RTX 2060', 80), -- F1 23
-(17, 'Windows 10', 'Ryzen 5 1500X', 16, 'GTX 1070', 110), -- Forza 5
-(18, 'Windows 10', 'Intel Core 2 Duo', 4, 'Integrated', 2), -- Stardew Valley
-(19, 'Windows 7', 'Intel Core i5', 8, 'GTX 760', 12), -- ETS 2
-(20, 'Windows 8', 'Intel Core 2 Duo', 4, 'Integrated', 8); -- Portal 2
+(1, 'Windows 11', 'Intel i9', 32, 'RTX 4090', 100),
+(2, 'Windows 10', 'Intel i5', 8, 'GTX 1060', 150),
+(3, 'Windows 11', 'Intel i7', 16, 'RTX 3080', 70),
+(4, 'Windows 10', 'AMD Ryzen 7', 16, 'RX 6800', 65),
+(5, 'Windows 10', 'Intel i5', 12, 'GTX 1060', 50),
+(6, 'Windows 10', 'Intel i7', 16, 'RTX 2060', 60),
+(7, 'Windows 11', 'Intel i5', 8, 'GTX 1660', 70),
+(8, 'Windows 10', 'AMD Ryzen 5', 16, 'RTX 2080', 150),
+(9, 'Windows 10', 'Intel i5', 8, 'GTX 1050', 12),
+(10, 'Windows 10', 'Intel Core i5', 8, 'Integrated', 50),
+(11, 'Windows 10', 'Intel i7 9700K', 16, 'RTX 3080', 60),
+(12, 'Windows 10', 'Intel i5 7500', 8, 'GTX 1060', 85),
+(13, 'Windows 7', 'Intel Core 2 Duo', 4, 'GeForce 6600', 15),
+(14, 'Windows 10', 'Intel i5 4590', 8, 'GTX 960', 60),
+(15, 'Windows 10', 'Intel i7 6700', 12, 'GTX 1660', 100),
+(16, 'Windows 10', 'Intel i5 9600K', 16, 'RTX 2060', 80),
+(17, 'Windows 10', 'Ryzen 5 1500X', 16, 'GTX 1070', 110),
+(18, 'Windows 10', 'Intel Core 2 Duo', 4, 'Integrated', 2),
+(19, 'Windows 7', 'Intel Core i5', 8, 'GTX 760', 12),
+(20, 'Windows 8', 'Intel Core 2 Duo', 4, 'Integrated', 8);
 
 -- 7. Tags
 INSERT INTO Tags (TagName) VALUES ('Multiplayer'), ('Singleplayer'), ('Co-op'), ('Open World'), ('Story Rich'), ('Difficult'), ('Sci-Fi'), ('Fantasy'), ('FPS'), ('Indie');
@@ -287,18 +297,26 @@ INSERT INTO Game_Category (GameID, CategoryID) VALUES
 
 -- 9. Game_Tag
 INSERT INTO Game_Tag (GameID, TagID) VALUES
-(2, 1), (2, 9), (3, 2), (3, 4), (5, 2), (5, 6), (10, 10), (1, 2), (4, 2), (7, 1), (8, 7), (9, 2);
+(1, 1), (1, 2), (1, 4), (1, 5), (2, 1), (2, 2), (2, 4), (2, 5), 
+(3, 2), (3, 5), (3, 8), (4, 2), (4, 5), (4, 6), (5, 2), (5, 4), (5, 5), (5, 8), 
+(6, 1), (6, 2), (6, 4), (6, 6), (6, 8), (7, 2), (7, 4), (7, 5), (7, 7), 
+(8, 1), (8, 2), (8, 3), (8, 5), (8, 8), (9, 1), (9, 2), (10, 1), (10, 2), 
+(11, 2), (12, 1), (12, 6), (12, 9), (13, 1), (13, 3), (13, 9), (14, 1), (14, 6), (14, 9), 
+(15, 1), (15, 2), (15, 3), (16, 1), (16, 2), (17, 1), (17, 2), (17, 4), 
+(18, 1), (18, 2), (18, 3), (18, 10), (19, 2), (19, 4), (19, 10), (20, 2), (20, 3), (20, 5), (20, 7);
 
 -- 10. Payment Methods
 INSERT INTO PaymentMethods (MethodName) VALUES ('Credit Card'), ('Debit Card'), ('Wallet'), ('PayPal'), ('Mobile Payment'), ('Gift Card'), ('Crypto'), ('Papara'), ('Bank Transfer'), ('QR Code');
 
 -- 11. Orders
 INSERT INTO Orders (UserID, MethodID, TotalAmount) VALUES
-(2, 1, 150.00), (3, 3, 2700.00), (4, 2, 0.00), (5, 1, 899.00), (6, 4, 1100.00), (2, 3, 900.00), (3, 1, 1500.00), (9, 5, 150.00), (6, 2, 0.00), (5, 1, 850.00);
+(2, 1, 800.00), (3, 3, 2049.00), (4, 2, 0.00), (5, 1, 400.00), (6, 4, 1250.00), 
+(2, 3, 1400.00), (3, 1, 900.00), (9, 5, 1800.00), (6, 2, 105.00), (5, 1, 350.00);
 
 -- 12. Order Details
 INSERT INTO OrderDetails (OrderID, GameID, UnitPrice) VALUES
-(1, 10, 150.00), (2, 3, 1500.00), (2, 4, 1200.00), (3, 2, 0.00), (4, 5, 899.00), (5, 7, 1100.00), (6, 6, 900.00), (7, 3, 1500.00), (8, 10, 150.00), (10, 9, 850.00);
+(1, 10, 800.00), (2, 3, 899.00), (2, 2, 1150.00), (3, 12, 0.00), (4, 5, 400.00), 
+(5, 7, 1250.00), (6, 6, 1400.00), (7, 1, 900.00), (8, 15, 1800.00), (9, 20, 105.00), (10, 9, 350.00);
 
 -- 13. Library
 INSERT INTO Library (UserID, GameID) VALUES
@@ -353,8 +371,6 @@ INSERT INTO Achievements (GameID, Title, Description, PointValue) VALUES
 (19, 'Long Haul', '10.000 km yol yap.', 20);
 
 -- 17. User Achievements
--- 17. USER ACHIEVEMENTS (Düzeltilmiş ID'ler)
--- Not: Başarım ID'leri 1'den 12'ye kadar olduğu için 15 ve 18 hatalıydı. Düzeltildi.
 INSERT INTO UserAchievements (UserID, AchievementID) VALUES
 (2, 1), (4, 2), (5, 6), (3, 9), (6, 11), (2, 3), (4, 10);
 
