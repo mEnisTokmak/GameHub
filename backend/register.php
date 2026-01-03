@@ -22,8 +22,8 @@ if(isset($data->username) && isset($data->email) && isset($data->password)) {
     // 2. Şifreyi Hashle (Güvenlik)
     $hashed_password = password_hash($data->password, PASSWORD_DEFAULT);
     
-    // 3. Kaydet (Varsayılan Rol: 2 -> Gamer)
-    $stmt = $pdo->prepare("INSERT INTO Users (Username, Email, Password, RoleID, Balance) VALUES (?, ?, ?, 2, 0)");
+    
+    $stmt = $pdo->prepare("INSERT INTO Users (Username, Email, Password, RoleID, Balance) VALUES (?, ?, ?, 3, 0)");
     
     if($stmt->execute([$data->username, $data->email, $hashed_password])) {
         echo json_encode(["status" => "success", "message" => "Kayıt başarılı! Şimdi giriş yapabilirsin."]);
