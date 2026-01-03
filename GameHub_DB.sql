@@ -206,20 +206,20 @@ CREATE TABLE PriceChangeLogs (
 -- SECTION 2: DATA INSERTION
 
 -- 1. Roles
-INSERT INTO Roles (RoleName) VALUES ('Admin'), ('Gamer'), ('Developer'), ('Moderator'), ('Support'), ('Tester'), ('Editor'), ('Guest'), ('Bot'), ('Banned');
+INSERT INTO Roles (RoleName) VALUES ('Admin'), ('Developer'), ('Gamer'), ('Moderator'), ('Support'), ('Tester'), ('Editor'), ('Guest'), ('Bot'), ('Banned');
 
 -- 2. Users
 INSERT INTO Users (RoleID, Username, Email, Password, Balance, Avatar) VALUES
 (1, 'GroupAdmin', 'admin@steamproject.com', 'admin123', 0.00, 'https://avatars.githubusercontent.com/u/1?v=4'),
-(2, 'AhmetKaan', 'ahmet@mail.com', 'pass1', 500.00, 'https://avatars.githubusercontent.com/u/2?v=4'),
-(2, 'MuhammetEnis', 'enis@mail.com', 'pass2', 1200.50, 'https://avatars.githubusercontent.com/u/3?v=4'),
-(2, 'EnverHalit', 'enver@mail.com', 'pass3', 3000.00, 'https://avatars.githubusercontent.com/u/4?v=4'),
-(2, 'MustafaGok', 'mustafa@mail.com', 'pass4', 150.00, 'https://avatars.githubusercontent.com/u/5?v=4'),
-(2, 'BurakKurt', 'burak@mail.com', 'pass5', 750.00, 'https://avatars.githubusercontent.com/u/6?v=4'),
-(3, 'ValveDev', 'contact@valve.com', 'securepass', 0.00, DEFAULT),
-(3, 'RockstarDev', 'dev@rockstar.com', 'devpass', 0.00, DEFAULT),
-(2, 'ProGamer_99', 'pro@mail.com', 'gamepass', 25.00, DEFAULT),
-(2, 'CasualPlayer', 'casual@mail.com', '123456', 0.00, DEFAULT);
+(3, 'AhmetKaan', 'ahmet@mail.com', 'pass1', 500.00, 'https://avatars.githubusercontent.com/u/2?v=4'),
+(3, 'MuhammetEnis', 'enis@mail.com', 'pass2', 1200.50, 'https://avatars.githubusercontent.com/u/3?v=4'),
+(3, 'EnverHalit', 'enver@mail.com', 'pass3', 3000.00, 'https://avatars.githubusercontent.com/u/4?v=4'),
+(3, 'MustafaGok', 'mustafa@mail.com', 'pass4', 150.00, 'https://avatars.githubusercontent.com/u/5?v=4'),
+(3, 'BurakKurt', 'burak@mail.com', 'pass5', 750.00, 'https://avatars.githubusercontent.com/u/6?v=4'),
+(2, 'ValveDev', 'contact@valve.com', 'securepass', 0.00, DEFAULT),
+(2, 'RockstarDev', 'dev@rockstar.com', 'devpass', 0.00, DEFAULT),
+(3, 'ProGamer_99', 'pro@mail.com', 'gamepass', 25.00, DEFAULT),
+(3, 'CasualPlayer', 'casual@mail.com', '123456', 0.00, DEFAULT);
 
 -- 3. Developers
 INSERT INTO Developers (CompanyName, Website, FoundationYear) VALUES
