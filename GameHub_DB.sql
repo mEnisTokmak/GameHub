@@ -235,7 +235,17 @@ INSERT INTO Developers (CompanyName, Website, FoundationYear) VALUES
 ('Indie Studio', 'indiestudio.io', 2023);
 
 -- 4. Categories
-INSERT INTO Categories (CategoryName) VALUES ('Action'), ('RPG'), ('Strategy'), ('Simulation'), ('Sports&Racing'), ('Horror'), ('Adventure'), ('Puzzle');
+INSERT INTO Categories (CategoryName, Description) VALUES 
+('Action', 'Fast-paced combat games.'),
+('RPG', 'Role-playing and character development.'),
+('Strategy', 'Tactical and mind games.'),
+('Simulation', 'Real-life activity simulation.'),
+('Sports & Racing', 'Competitive sports and driving.'),
+('Horror', 'Scary and thriller games.'),
+('Adventure', 'Exploration and story-driven.'),
+('Puzzle', 'Logic and problem solving.'),
+('Fighting', 'Competitive close combat battles.'),
+('Survival', 'Gather resources and survive harsh environments.');
 
 -- 5. Games
 INSERT INTO Games (DeveloperID, Title, Description, Price, ReleaseDate, SizeGB, IsApproved, ImageUrl, HeaderUrl) VALUES
@@ -263,7 +273,13 @@ INSERT INTO Games (DeveloperID, Title, Description, Price, ReleaseDate, SizeGB, 
 
 (10, 'Stardew Valley', 'Open-ended country-life RPG.', 150.00, '2016-02-26', 1.5, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/413150/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/413150/library_hero.jpg'),
 (10, 'Euro Truck Simulator 2', 'Drive across Europe as the king of the road.', 200.00, '2012-10-19', 12.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/227300/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/227300/library_hero.jpg'),
-(1, 'Portal 2', 'Award-winning physics-based puzzle game.', 105.00, '2011-04-19', 8.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/620/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/620/library_hero.jpg');
+(1, 'Portal 2', 'Award-winning physics-based puzzle game.', 105.00, '2011-04-19', 8.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/620/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/620/library_hero.jpg'),
+
+(7, 'Street Fighter 6', 'The latest evolution of the fighting game series.', 1400.00, '2023-06-02', 60.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1364780/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1364780/library_hero.jpg'),
+(10, 'Mortal Kombat 1', 'Discover a reborn Mortal Kombat Universe.', 1200.00, '2023-09-19', 100.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1971870/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1971870/library_hero.jpg'),
+
+(10, 'Rust', 'The only aim in Rust is to survive.', 500.00, '2018-02-08', 25.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/252490/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/252490/library_hero.jpg'),
+(10, 'Subnautica', 'Descend into the depths of an alien underwater world.', 350.00, '2018-01-23', 20.0, 1, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/264710/library_600x900.jpg', 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/264710/library_hero.jpg');
 
 -- 6. System Requirements
 INSERT INTO SystemRequirements (GameID, OS, Processor, MemoryGB, GraphicsCard, StorageGB) VALUES
@@ -286,14 +302,18 @@ INSERT INTO SystemRequirements (GameID, OS, Processor, MemoryGB, GraphicsCard, S
 (17, 'Windows 10', 'Ryzen 5 1500X', 16, 'GTX 1070', 110),
 (18, 'Windows 10', 'Intel Core 2 Duo', 4, 'Integrated', 2),
 (19, 'Windows 7', 'Intel Core i5', 8, 'GTX 760', 12),
-(20, 'Windows 8', 'Intel Core 2 Duo', 4, 'Integrated', 8);
+(20, 'Windows 8', 'Intel Core 2 Duo', 4, 'Integrated', 8),
+(21, 'Windows 10', 'Intel i5 7500', 8, 'GTX 1060', 60),
+(22, 'Windows 10', 'Intel i5 6600', 8, 'GTX 980', 100),
+(23, 'Windows 10', 'Intel i7 3770', 10, 'GTX 670', 25),
+(24, 'Windows 7', 'Intel Haswell 2 Cores', 4, 'Intel HD 4600', 20);
 
 -- 7. Tags
 INSERT INTO Tags (TagName) VALUES ('Multiplayer'), ('Singleplayer'), ('Co-op'), ('Open World'), ('Story Rich'), ('Difficult'), ('Sci-Fi'), ('Fantasy'), ('FPS'), ('Indie');
 
 -- 8. Game_Category
 INSERT INTO Game_Category (GameID, CategoryID) VALUES
-(1, 1), (1, 7), (1, 4), (2, 1), (2, 7), (3, 1), (3, 7), (4, 6), (4, 1), (5, 2), (5, 7), (6, 2), (6, 1), (7, 2), (7, 1), (7, 4), (8, 2), (8, 3), (9, 3), (10, 3), (11, 4), (11, 3), (12, 1), (13, 6), (13, 1), (14, 1), (14, 3), (15, 5), (16, 5), (16, 4), (17, 5), (17, 4), (18, 4), (18, 2), (19, 4), (20, 8), (20, 7);
+(1, 1), (1, 7), (1, 4), (2, 1), (2, 7), (3, 1), (3, 7), (4, 6), (4, 1), (5, 2), (5, 7), (6, 2), (6, 1), (7, 2), (7, 1), (7, 4), (8, 2), (8, 3), (9, 3), (10, 3), (11, 4), (11, 3), (12, 1), (13, 6), (13, 1), (14, 1), (14, 3), (15, 5), (16, 5), (16, 4), (17, 5), (17, 4), (18, 4), (18, 2), (19, 4), (20, 8), (20, 7), (21, 9), (21, 1), (22, 9), (22, 1), (23, 10), (23, 1), (23, 7), (24, 10), (24, 7), (24, 4);
 
 -- 9. Game_Tag
 INSERT INTO Game_Tag (GameID, TagID) VALUES
@@ -303,7 +323,8 @@ INSERT INTO Game_Tag (GameID, TagID) VALUES
 (8, 1), (8, 2), (8, 3), (8, 5), (8, 8), (9, 1), (9, 2), (10, 1), (10, 2), 
 (11, 2), (12, 1), (12, 6), (12, 9), (13, 1), (13, 3), (13, 9), (14, 1), (14, 6), (14, 9), 
 (15, 1), (15, 2), (15, 3), (16, 1), (16, 2), (17, 1), (17, 2), (17, 4), 
-(18, 1), (18, 2), (18, 3), (18, 10), (19, 2), (19, 4), (19, 10), (20, 2), (20, 3), (20, 5), (20, 7);
+(18, 1), (18, 2), (18, 3), (18, 10), (19, 2), (19, 4), (19, 10), (20, 2), (20, 3), (20, 5), (20, 7), (21, 1), (21, 2),(22, 1), (22, 2),
+(23, 1), (23, 3), (23, 4), (24, 2), (24, 4), (24, 7);
 
 -- 10. Payment Methods
 INSERT INTO PaymentMethods (MethodName) VALUES ('Credit Card'), ('Debit Card'), ('Wallet'), ('PayPal'), ('Mobile Payment'), ('Gift Card'), ('Crypto'), ('Papara'), ('Bank Transfer'), ('QR Code');
@@ -353,26 +374,38 @@ INSERT INTO Reviews (UserID, GameID, Rating, Comment) VALUES
 (6, 17, 10, 'Mexico map is huge and beautiful. Best racing game.'),
 (4, 18, 10, 'So relaxing and peaceful. I love this game.'),
 (5, 19, 9, 'Driving trucks while listening to radio is therapy.'),
-(6, 20, 10, 'Best puzzle game ever. The dialogue is hilarious.');
+(6, 20, 10, 'Best puzzle game ever. The dialogue is hilarious.'),
+(3, 21, 9, 'Modern controls make it accessible for everyone. Best SF in years.'),
+(9, 21, 10, 'Netcode is perfect. Ranked matches are very intense.'),
+(5, 22, 8, 'The graphics are stunning but the Kameo system takes time to get used to.'),
+(2, 22, 9, 'Story mode is surprisingly good. Fatalities are brutal as always.'),
+(6, 23, 10, 'I built a huge base and got raided while I was sleeping. 10/10 would rage again.'),
+(4, 23, 7, 'Toxic community but very addictive gameplay. Needs a lot of time.'),
+(2, 24, 10, 'Terrifying but beautiful. I am scared of the deep ocean now.'),
+(5, 24, 9, 'Best survival game I have ever played. The atmosphere is unique.');
 
 -- 16. Achievements
 INSERT INTO Achievements (GameID, Title, Description, PointValue) VALUES
-(1, 'Welcome to Los Santos', 'GTA V giriş görevini tamamla.', 10),
-(2, 'Legend of the West', 'RDR2 hikayesini %100 bitir.', 50),
-(3, 'God of War', 'Tüm valkürleri yen.', 50),
-(4, 'Survivor', 'Köyden sağ çık.', 20),
-(5, 'Child of Prophecy', 'Oyunu herhangi bir zorlukta bitir.', 30),
-(6, 'Elden Lord', 'Elden Ring tahtına otur.', 100),
-(7, 'Breathtaking', 'Tüm siberkasapları yen.', 30),
-(8, 'Critical Hit', 'Zarda 20 at.', 10),
-(12, 'Global Elite', 'Rekabetçi modda rütbe atla.', 25),
-(15, 'Top Scorer', 'Bir maçta 5 gol at.', 15),
-(18, 'Millionaire', '1.000.000 altın kazan.', 40),
-(19, 'Long Haul', '10.000 km yol yap.', 20);
+(1, 'Welcome to Los Santos', 'Complete the intro mission.', 10),
+(2, 'Legend of the West', 'Complete the story mode 100%.', 50),
+(3, 'God of War', 'Defeat all Valkyries.', 50),
+(4, 'Survivor', 'Survive the village attack.', 20),
+(5, 'Child of Prophecy', 'Finish the game on any difficulty.', 30),
+(6, 'Elden Lord', 'Reach the ending and become Elden Lord.', 100),
+(7, 'Breathtaking', 'Collect all Johnny Silverhand items.', 30),
+(8, 'Critical Hit', 'Roll a natural 20.', 10),
+(12, 'Global Elite', 'Reach the Global Elite rank.', 50),
+(15, 'Top Scorer', 'Score 5 goals in a single match.', 15),
+(18, 'Millionaire', 'Earn 1,000,000 gold.', 40),
+(19, 'Long Haul', 'Drive 10,000 km in total.', 20),
+(21, 'World Warrior', 'Win 10 online matches.', 25),
+(22, 'Fatality', 'Perform your first Fatality.', 20),
+(23, 'Survivor', 'Survive for 10 days in game.', 30),
+(24, 'Deep Dive', 'Reach 500m depth.', 30);
 
 -- 17. User Achievements
 INSERT INTO UserAchievements (UserID, AchievementID) VALUES
-(2, 1), (4, 2), (5, 6), (3, 9), (6, 11), (2, 3), (4, 10);
+(2, 1), (4, 2), (5, 6), (3, 9), (6, 11), (2, 3), (4, 10), (3, 13), (6, 15), (2, 3), (4, 10);
 
 -- 18. Friends
 INSERT INTO Friends (User1_ID, User2_ID, Status) VALUES
