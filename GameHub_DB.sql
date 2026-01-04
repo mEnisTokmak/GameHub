@@ -31,8 +31,8 @@ CREATE TABLE Users (
     Password VARCHAR(255) NOT NULL,
     Balance DECIMAL(10, 2) DEFAULT 0.00,
     RegistrationDate DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Avatar VARCHAR(255) DEFAULT 'https://avatars.akamai.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg', -- YENİ EKLENDİ
-    About TEXT, -- YENİ EKLENDİ
+    Avatar VARCHAR(255) DEFAULT 'https://avatars.akamai.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg',
+    About TEXT,
     FOREIGN KEY (RoleID) REFERENCES Roles(RoleID)
 );
 
@@ -70,10 +70,10 @@ CREATE TABLE Games (
 CREATE TABLE SystemRequirements (
     RequirementID INT AUTO_INCREMENT PRIMARY KEY,
     GameID INT NOT NULL UNIQUE,
-    OS VARCHAR(100), -- Operating System
-    Processor VARCHAR(150), -- CPU
-    MemoryGB INT, -- RAM
-    GraphicsCard VARCHAR(150), -- GPU
+    OS VARCHAR(100),
+    Processor VARCHAR(150),
+    MemoryGB INT,
+    GraphicsCard VARCHAR(150),
     StorageGB INT,
     FOREIGN KEY (GameID) REFERENCES Games(GameID) ON DELETE CASCADE
 );
@@ -362,7 +362,7 @@ INSERT INTO Achievements (GameID, Title, Description, PointValue) VALUES
 (3, 'God of War', 'Tüm valkürleri yen.', 50),
 (4, 'Survivor', 'Köyden sağ çık.', 20),
 (5, 'Child of Prophecy', 'Oyunu herhangi bir zorlukta bitir.', 30),
-(6, 'Elden Lord', 'Elden Ring tahtına otur.', 100), -- Artık Doğru Yerde (GameID 6)
+(6, 'Elden Lord', 'Elden Ring tahtına otur.', 100),
 (7, 'Breathtaking', 'Tüm siberkasapları yen.', 30),
 (8, 'Critical Hit', 'Zarda 20 at.', 10),
 (12, 'Global Elite', 'Rekabetçi modda rütbe atla.', 25),
@@ -621,7 +621,7 @@ END //
 
 DELIMITER ;
 
--- SECTION 5: PERFORMANCE OPTIMIZATION (Course Requirement: Traffic Reduction)
+-- SECTION 5: PERFORMANCE OPTIMIZATION
 -- Adding indexes to frequently searched/joined columns to optimize performance.
 
 CREATE INDEX idx_users_username ON Users(Username);
